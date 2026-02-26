@@ -1,6 +1,6 @@
 // pages/api/host.ts
 import type { NextApiRequest, NextApiResponse } from "next";
-import { kv } from "@vercel/kv";
+import { redis } from "../../lib/redis";
 import { GameState, DEFAULT_STATE } from "../../lib/gameState";
 import { QUESTIONS } from "../../lib/questions";
 
@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: "Código incorrecto" });
   }
 
-  const state: GameState = (await kv.get<GameState>(KEY)) ?? { ...DEFAULT_STATE };
+  const state: GameState = (await redis.get<GameState>(KEY)) ?? { ...DEFAULT_STATE };
 
   switch (action) {
     case "reset": {
@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         questionOrder: shuffle(QUESTIONS.map((_, i) => i)).slice(0, 10), // 10 preguntas mezcladas
         updatedAt: Date.now(),
       };
-      await kv.set(KEY, fresh, { ex: 60 * 60 * 4 });
+      await redis.set(KEY, JSON.stringify(fresh), { ex: 60 * 60 * 4 });
       return res.status(200).json(fresh);
     }
 
@@ -43,14 +43,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       state.status = "question";
       state.questionStartedAt = Date.now();
       state.updatedAt = Date.now();
-      await kv.set(KEY, state, { ex: 60 * 60 * 4 });
+      await redis.set(KEY, JSON.stringify(state), { ex: 60 * 60 * 4 });
       return res.status(200).json(state);
     }
 
     case "reveal": {
       state.status = "answer_reveal";
       state.updatedAt = Date.now();
-      await kv.set(KEY, state, { ex: 60 * 60 * 4 });
+      await redis.set(KEY, JSON.stringify(state), { ex: 60 * 60 * 4 });
       return res.status(200).json(state);
     }
 
@@ -64,14 +64,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         state.questionStartedAt = Date.now();
       }
       state.updatedAt = Date.now();
-      await kv.set(KEY, state, { ex: 60 * 60 * 4 });
+      await redis.set(KEY, JSON.stringify(state), { ex: 60 * 60 * 4 });
       return res.status(200).json(state);
     }
 
     case "show_leaderboard": {
       state.status = "leaderboard";
       state.updatedAt = Date.now();
-      await kv.set(KEY, state, { ex: 60 * 60 * 4 });
+      await redis.set(KEY, JSON.stringify(state), { ex: 60 * 60 * 4 });
       return res.status(200).json(state);
     }
 
@@ -79,3 +79,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: "Acción desconocida" });
   }
 }
+
