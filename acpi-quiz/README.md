@@ -19,7 +19,7 @@
 
 ## 📖 ¿Qué es ACPI Quiz?
 
-**ACPI Quiz** es una aplicación web que permite realizar **trivia en vivo** durante la clase. Funciona como un Kahoot personalizado, pero con contenido propio del Taller de Programación.
+**ACPI Quiz** es una aplicación web que permite realizar **trivia en vivo** durante la clase, con contenido propio del Taller de Programación.
 
 El profesor proyecta las preguntas en la pantalla del aula y los alumnos responden desde sus **notebooks**, usando la misma herramienta con la que programan. Todo es **en tiempo real**: las respuestas, el ranking y los puntajes se actualizan al instante.
 
@@ -102,20 +102,6 @@ El sistema de puntos está diseñado para premiar tanto el **conocimiento** como
 - **Bonus por velocidad**: Cuanto más rápido respondés correctamente, más puntos extras ganás
 - **🔥 Bonus por racha**: Si acertás 3 o más preguntas seguidas, tus puntos se multiplican x1.5
 - **Sin penalización**: Responder mal no resta puntos (los alumnos no tienen miedo de intentar)
-
----
-
-## 🔮 Visión a futuro
-
-Este proyecto nació como herramienta interna para nuestro Taller de Programación, pero tiene el potencial de convertirse en una **plataforma SaaS** (Software as a Service) donde:
-
-- 👩‍🏫 **Cualquier docente** pueda crearse una cuenta y armar sus propias preguntas
-- 📝 **Múltiples materias**: Matemática, Historia, Ciencias, Idiomas, etc.
-- 🏫 **Instituciones** puedan gestionar quiz para toda la escuela
-- 📊 **Analytics**: Reportes de rendimiento por alumno y por tema
-- 🌍 **Acceso global**: Profesores de cualquier parte del mundo
-
-> La idea es crear un **Kahoot argentino, open-source y personalizable**, pensado desde la realidad del aula.
 
 ---
 
