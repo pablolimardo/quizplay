@@ -45,6 +45,30 @@ export default function PlayPage() {
     return s;
   }, []);
 
+  // Auto-reconectar desde localStorage al cargar la página
+  useEffect(() => {
+    const saved = localStorage.getItem("acpi_player_name");
+    if (saved) {
+      // Verificar que el jugador siga existiendo en el estado del juego
+      fetch("/api/state")
+        .then(r => r.json())
+        .then((s: GameState) => {
+          if (s.players[saved.toLowerCase()]) {
+            setPlayerName(saved);
+            setJoined(true);
+          } else {
+            // El jugador ya no existe (se hizo reset), limpiar localStorage
+            localStorage.removeItem("acpi_player_name");
+          }
+        })
+        .catch(() => {
+          // Si falla la verificación, intentar reconectar igual
+          setPlayerName(saved);
+          setJoined(true);
+        });
+    }
+  }, []);
+
   // Poll
   useEffect(() => {
     if (!joined) return;
@@ -90,6 +114,7 @@ export default function PlayPage() {
       const data = await r.json();
       if (!r.ok) { setError(data.error); return; }
       setPlayerName(data.name);
+      localStorage.setItem("acpi_player_name", data.name);
       setJoined(true);
     } catch {
       setError("Error de conexión");

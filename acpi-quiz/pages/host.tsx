@@ -51,6 +51,13 @@ export default function HostPage() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Auto-reconectar sesión del profe desde localStorage
+  useEffect(() => {
+    if (localStorage.getItem("acpi_host_authed") === "true") {
+      setAuthed(true);
+    }
+  }, []);
+
   const fetchState = useCallback(async () => {
     const r = await fetch("/api/state");
     const s: GameState = await r.json();
@@ -112,11 +119,11 @@ export default function HostPage() {
             placeholder="Código de acceso"
             value={authCode}
             onChange={(e) => setAuthCode(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && authCode === HOST_CODE && setAuthed(true)}
+            onKeyDown={(e) => e.key === "Enter" && authCode === HOST_CODE && (() => { setAuthed(true); localStorage.setItem("acpi_host_authed", "true"); })()}
             className="w-full p-3 rounded-xl mb-4 text-center font-mono bg-black/40 border border-gray-700 outline-none focus:border-purple-500 text-white"
           />
           <button
-            onClick={() => authCode === HOST_CODE ? setAuthed(true) : alert("Código incorrecto")}
+            onClick={() => authCode === HOST_CODE ? (() => { setAuthed(true); localStorage.setItem("acpi_host_authed", "true"); })() : alert("Código incorrecto")}
             className="w-full py-3 rounded-xl font-bold text-white"
             style={{ background: "#7c3aed" }}
           >
