@@ -65,13 +65,13 @@ export default function HostPage() {
     return s;
   }, []);
 
-  const hostAction = useCallback(async (action: string) => {
+  const hostAction = useCallback(async (action: string, extra?: Record<string, unknown>) => {
     setLoading(true);
     try {
       const r = await fetch("/api/host", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, code: HOST_CODE }),
+        body: JSON.stringify({ action, code: HOST_CODE, ...extra }),
       });
       const s: GameState = await r.json();
       setState(s);
@@ -93,8 +93,10 @@ export default function HostPage() {
     if (!state || state.status !== "question") { setTimeLeft(0); return; }
     const qIdx = state.questionOrder[state.currentQuestion];
     const q = QUESTIONS[qIdx];
+    const multiplier = state.timeMultiplier ?? 2;
+    const totalTime = Math.round(q.timeLimit * multiplier);
     const elapsed = Math.floor((Date.now() - state.questionStartedAt) / 1000);
-    setTimeLeft(Math.max(0, q.timeLimit - elapsed));
+    setTimeLeft(Math.max(0, totalTime - elapsed));
 
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
@@ -104,7 +106,7 @@ export default function HostPage() {
       });
     }, 1000);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [state?.status, state?.currentQuestion, state?.questionStartedAt]);
+  }, [state?.status, state?.currentQuestion, state?.questionStartedAt, state?.timeMultiplier]);
 
   // ── LOGIN ──
   if (!authed) {
@@ -198,6 +200,40 @@ export default function HostPage() {
             </div>
           )}
         </div>
+
+        {/* Configuración de tiempo */}
+        <div className="mt-6 rounded-2xl p-5" style={{ background: "#1a1030", border: "1px solid #2d1f4e" }}>
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-lg">⏱ Tiempo por pregunta</h3>
+              <p className="text-gray-500 text-sm">Multiplicador sobre el tiempo base de cada pregunta</p>
+            </div>
+            <div className="flex gap-2">
+              {[
+                { label: "Normal", value: 1 },
+                { label: "Doble", value: 2 },
+                { label: "Triple", value: 3 },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => hostAction("set_time", { multiplier: opt.value })}
+                  className="py-2 px-4 rounded-lg font-bold text-sm transition-all hover:scale-105"
+                  style={{
+                    background: (state.timeMultiplier ?? 2) === opt.value
+                      ? "linear-gradient(135deg, #7c3aed, #a855f7)"
+                      : "#0d0b1a",
+                    border: (state.timeMultiplier ?? 2) === opt.value
+                      ? "2px solid #a78bfa"
+                      : "2px solid #2d1f4e",
+                    color: (state.timeMultiplier ?? 2) === opt.value ? "white" : "#9ca3af",
+                  }}
+                >
+                  {opt.label} ({opt.value}x)
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -221,7 +257,7 @@ export default function HostPage() {
               <div className="text-3xl font-bold" style={{ color: "#a78bfa" }}>{answeredCount}</div>
               <div className="text-xs text-gray-500">respondieron</div>
             </div>
-            <CircularTimer timeLeft={timeLeft} total={currentQ.timeLimit} />
+            <CircularTimer timeLeft={timeLeft} total={Math.round(currentQ.timeLimit * (state.timeMultiplier ?? 2))} />
             <button onClick={() => hostAction("reveal")} disabled={loading}
               className="py-2 px-6 rounded-xl font-bold transition-all hover:scale-105 disabled:opacity-50"
               style={{ background: "#0ea5e9" }}>

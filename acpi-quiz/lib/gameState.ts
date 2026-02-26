@@ -22,6 +22,8 @@ export interface GameState {
   players: Record<string, Player>; // key = playerName lowercase
   hostCode: string; // código para que el host autentique
   questionOrder: number[]; // índices mezclados de preguntas
+  previousQuestions: number[]; // preguntas de la ronda anterior (para no repetir)
+  timeMultiplier: number; // multiplicador de tiempo (1 = normal, 2 = doble, etc.)
   updatedAt: number;
 }
 
@@ -32,5 +34,7 @@ export const DEFAULT_STATE: GameState = {
   players: {},
   hostCode: "acpi2026",
   questionOrder: [],
+  previousQuestions: [],
+  timeMultiplier: 2, // doble de tiempo por defecto
   updatedAt: Date.now(),
 };

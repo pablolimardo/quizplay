@@ -92,15 +92,17 @@ export default function PlayPage() {
     if (!state || state.status !== "question") { setTimeLeft(0); return; }
     const qIdx = state.questionOrder[state.currentQuestion];
     const q = QUESTIONS[qIdx];
+    const multiplier = state.timeMultiplier ?? 2;
+    const totalTime = Math.round(q.timeLimit * multiplier);
     const elapsed = Math.floor((Date.now() - state.questionStartedAt) / 1000);
-    const tl = Math.max(0, q.timeLimit - elapsed);
+    const tl = Math.max(0, totalTime - elapsed);
     setTimeLeft(tl);
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
       setTimeLeft((p) => { if (p <= 1) { clearInterval(timerRef.current!); return 0; } return p - 1; });
     }, 1000);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [state?.status, state?.currentQuestion, state?.questionStartedAt]);
+  }, [state?.status, state?.currentQuestion, state?.questionStartedAt, state?.timeMultiplier]);
 
   const handleJoin = async () => {
     if (name.trim().length < 2) { setError("Ingresá al menos 2 caracteres"); return; }
@@ -204,8 +206,9 @@ export default function PlayPage() {
     const qIdx = state.questionOrder[state.currentQuestion];
     const q = QUESTIONS[qIdx];
     const alreadyAnswered = selectedAnswer !== null || answerResult !== null;
-    const pct = Math.round((timeLeft / q.timeLimit) * 100);
-    const timerColor = timeLeft > q.timeLimit * 0.5 ? "#22c55e" : timeLeft > q.timeLimit * 0.2 ? "#f59e0b" : "#ef4444";
+    const actualTimeLimit = Math.round(q.timeLimit * (state.timeMultiplier ?? 2));
+    const pct = Math.round((timeLeft / actualTimeLimit) * 100);
+    const timerColor = timeLeft > actualTimeLimit * 0.5 ? "#22c55e" : timeLeft > actualTimeLimit * 0.2 ? "#f59e0b" : "#ef4444";
 
     return (
       <div className="min-h-screen flex flex-col p-4">

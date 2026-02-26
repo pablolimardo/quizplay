@@ -6,6 +6,7 @@ import { QUESTIONS } from "../../lib/questions";
 
 const KEY = "acpi_quiz_state";
 const HOST_CODE = process.env.HOST_CODE ?? "acpi2026";
+const QUESTIONS_PER_ROUND = 10;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -14,6 +15,16 @@ function shuffle<T>(arr: T[]): T[] {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+/** Selecciona preguntas evitando las de la ronda anterior */
+function pickQuestions(previous: number[], count: number): number[] {
+  const allIndices = QUESTIONS.map((_, i) => i);
+  // Filtrar las de la ronda anterior
+  const available = allIndices.filter(i => !previous.includes(i));
+  // Si no hay suficientes disponibles (pocas preguntas), usar todas
+  const pool = available.length >= count ? available : allIndices;
+  return shuffle(pool).slice(0, count);
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -27,12 +38,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const state: GameState = (await redis.get<GameState>(KEY)) ?? { ...DEFAULT_STATE };
 
+  // Asegurar compatibilidad con estados viejos que no tienen los campos nuevos
+  if (state.timeMultiplier === undefined) state.timeMultiplier = 2;
+  if (state.previousQuestions === undefined) state.previousQuestions = [];
+
   switch (action) {
+    case "set_time": {
+      const { multiplier } = req.body;
+      if (typeof multiplier === "number" && multiplier >= 0.5 && multiplier <= 5) {
+        state.timeMultiplier = multiplier;
+        state.updatedAt = Date.now();
+        await redis.set(KEY, JSON.stringify(state), { ex: 60 * 60 * 4 });
+      }
+      return res.status(200).json(state);
+    }
+
     case "reset": {
+      // Guardar las preguntas actuales como "anteriores" para no repetir
+      const prevQuestions = state.questionOrder.length > 0 ? [...state.questionOrder] : state.previousQuestions;
       const fresh: GameState = {
         ...DEFAULT_STATE,
         hostCode: HOST_CODE,
-        questionOrder: shuffle(QUESTIONS.map((_, i) => i)).slice(0, 10), // 10 preguntas mezcladas
+        timeMultiplier: state.timeMultiplier, // Mantener el multiplicador de tiempo
+        previousQuestions: prevQuestions,
+        questionOrder: pickQuestions(prevQuestions, QUESTIONS_PER_ROUND),
         updatedAt: Date.now(),
       };
       await redis.set(KEY, JSON.stringify(fresh), { ex: 60 * 60 * 4 });
@@ -42,7 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     case "start_question": {
       // Si no hay preguntas mezcladas, inicializarlas (primera vez)
       if (state.questionOrder.length === 0) {
-        state.questionOrder = shuffle(QUESTIONS.map((_, i) => i)).slice(0, 10);
+        state.questionOrder = pickQuestions(state.previousQuestions, QUESTIONS_PER_ROUND);
         state.currentQuestion = 0;
         // Limpiar respuestas previas de los jugadores (por si hubo una ronda anterior)
         for (const key of Object.keys(state.players)) {

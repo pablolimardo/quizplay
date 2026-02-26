@@ -33,7 +33,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const isCorrect = answerIndex === question.correct;
   const elapsed = Date.now() - state.questionStartedAt;
-  const timeLimit = question.timeLimit * 1000;
+  const multiplier = state.timeMultiplier ?? 2;
+  const timeLimit = question.timeLimit * multiplier * 1000;
 
   let points = 0;
   if (isCorrect) {
