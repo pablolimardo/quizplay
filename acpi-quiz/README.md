@@ -21,11 +21,11 @@
 
 **ACPI Quiz** es una aplicación web que permite realizar **trivia en vivo** durante la clase. Funciona como un Kahoot personalizado, pero con contenido propio del Taller de Programación.
 
-El profesor proyecta las preguntas en la pantalla del aula y los alumnos responden desde sus celulares o computadoras. Todo es **en tiempo real**: las respuestas, el ranking y los puntajes se actualizan al instante.
+El profesor proyecta las preguntas en la pantalla del aula y los alumnos responden desde sus **notebooks**, usando la misma herramienta con la que programan. Todo es **en tiempo real**: las respuestas, el ranking y los puntajes se actualizan al instante.
 
 ### 🎯 Objetivo pedagógico
 
-Transformar la evaluación y el repaso de contenidos en una experiencia **lúdica y motivadora**, donde los alumnos compiten sanamente mientras refuerzan lo aprendido en clase.
+Transformar la evaluación y el repaso de contenidos en una experiencia **lúdica y motivadora**, donde los alumnos compiten sanamente mientras refuerzan lo aprendido en clase. La herramienta aprovecha las notebooks del aula como **recurso pedagógico**, fomentando un uso responsable y productivo de la tecnología.
 
 ---
 
@@ -33,8 +33,8 @@ Transformar la evaluación y el repaso de contenidos en una experiencia **lúdic
 
 | Característica | Descripción |
 |---|---|
-| 🎮 **Quiz en tiempo real** | Los alumnos responden desde cualquier dispositivo con navegador |
-| 📱 **Sin instalación** | No requiere descargar ninguna app, funciona directamente en el navegador |
+| 🎮 **Quiz en tiempo real** | Los alumnos responden desde las notebooks del aula |
+| 💻 **Sin instalación** | No requiere descargar nada, funciona directamente en el navegador |
 | ⏱ **Tiempo configurable** | El profe elige la velocidad: Normal (1x), Doble (2x) o Triple (3x) |
 | 🏆 **Ranking y puntaje** | Sistema de puntos con bonus por rapidez y rachas de aciertos |
 | 🔄 **Preguntas inteligentes** | Las preguntas no se repiten entre rondas consecutivas |
@@ -55,7 +55,7 @@ Transformar la evaluación y el repaso de contenidos en una experiencia **lúdic
 
 ### Paso 2 — Los alumnos se unen
 
-1. Abren **[quizplayacpi.vercel.app/play](https://quizplayacpi.vercel.app/play)** desde su celular o computadora
+1. Abren **[quizplayacpi.vercel.app/play](https://quizplayacpi.vercel.app/play)** desde su notebook
 2. Escriben su nombre o apodo
 3. Aparecen en la pantalla del profe en tiempo real
 
@@ -71,8 +71,8 @@ Transformar la evaluación y el repaso de contenidos en una experiencia **lúdic
 ### Pantalla del profe (proyector):
 > Se proyecta la pregunta con las opciones, un timer circular, y un mini-leaderboard con los puntajes en tiempo real.
 
-### Pantalla del alumno (celular):
-> Ven la pregunta, las opciones como botones grandes y fáciles de tocar, el tiempo restante, y su puntaje acumulado.
+### Pantalla del alumno (notebook):
+> Ven la pregunta, las opciones como botones claros y accesibles, el tiempo restante, y su puntaje acumulado.
 
 ---
 
