@@ -42,6 +42,70 @@ function CircularTimer({ timeLeft, total }: { timeLeft: number; total: number })
   );
 }
 
+/** Genera y descarga un CSV con los resultados de los alumnos */
+function downloadResultsCSV(state: GameState) {
+  const players = Object.values(state.players).sort((a, b) => b.score - a.score);
+  const questionCount = state.questionOrder.length;
+
+  // Encabezados
+  const headers = [
+    "Posición",
+    "Alumno",
+    "Puntaje",
+    "Correctas",
+    "Incorrectas",
+    "Sin responder",
+    "Total preguntas",
+    "Precisión (%)",
+    ...state.questionOrder.map((qIdx, i) => {
+      const q = QUESTIONS[qIdx];
+      return `P${i + 1} - ${q.topic}`;
+    }),
+  ];
+
+  // Filas
+  const rows = players.map((p, rank) => {
+    const correctas = p.answers.filter(a => a === true).length;
+    const incorrectas = p.answers.filter(a => a === false).length;
+    const sinResponder = questionCount - p.answers.length;
+    const precision = questionCount > 0 ? Math.round((correctas / questionCount) * 100) : 0;
+
+    const perQuestion = state.questionOrder.map((_, i) => {
+      if (i >= p.answers.length) return "—";
+      if (p.answers[i] === true) return "✓";
+      if (p.answers[i] === false) return "✗";
+      return "—";
+    });
+
+    return [
+      rank + 1,
+      p.name,
+      p.score,
+      correctas,
+      incorrectas,
+      sinResponder,
+      questionCount,
+      precision,
+      ...perQuestion,
+    ];
+  });
+
+  // BOM para que Excel reconozca UTF-8
+  const BOM = "\uFEFF";
+  const csv = BOM + [headers, ...rows].map(row =>
+    row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+  ).join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const fecha = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `ACPI_Quiz_Resultados_${fecha}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function HostPage() {
   const [state, setState] = useState<GameState | null>(null);
   const [authCode, setAuthCode] = useState("");
@@ -418,11 +482,18 @@ export default function HostPage() {
           ))}
         </div>
 
-        <button onClick={() => hostAction("reset")} disabled={loading}
-          className="py-4 px-12 rounded-xl font-bold text-xl hover:scale-105 disabled:opacity-50"
-          style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }}>
-          🔄 Nueva ronda
-        </button>
+        <div className="flex gap-4">
+          <button onClick={() => downloadResultsCSV(state)}
+            className="py-4 px-8 rounded-xl font-bold text-xl hover:scale-105"
+            style={{ background: "linear-gradient(135deg, #059669, #10b981)", color: "white" }}>
+            📊 Descargar resultados
+          </button>
+          <button onClick={() => hostAction("reset")} disabled={loading}
+            className="py-4 px-8 rounded-xl font-bold text-xl hover:scale-105 disabled:opacity-50"
+            style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }}>
+            🔄 Nueva ronda
+          </button>
+        </div>
       </div>
     );
   }
