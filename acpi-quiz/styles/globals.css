@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --neon: #7c3aed;
+  --neon-bright: #a78bfa;
+  --bg: #0f0a1a;
+  --card: #1a1030;
+  --border: #2d1f4e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background-color: var(--bg);
+  color: white;
+  min-height: 100vh;
+}
+
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+@keyframes pulse-neon {
+  0%, 100% { box-shadow: 0 0 10px #7c3aed66, 0 0 30px #7c3aed33; }
+  50% { box-shadow: 0 0 20px #7c3aedaa, 0 0 60px #7c3aed55; }
+}
+
+@keyframes countdown {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 283; }
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.neon-border { animation: pulse-neon 2s ease-in-out infinite; }
+.pop-in { animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.slide-up { animation: slide-up 0.3s ease forwards; }
+
+.btn-option {
+  @apply w-full text-left p-4 rounded-xl border-2 transition-all duration-200 font-medium text-base;
+  border-color: var(--border);
+  background: var(--card);
+}
+.btn-option:hover:not(:disabled) {
+  border-color: #7c3aed;
+  background: #2d1f4e;
+  transform: translateX(4px);
+}
+.btn-option.selected {
+  border-color: #7c3aed;
+  background: #2d1f4e;
+}
+.btn-option.correct {
+  border-color: #22c55e !important;
+  background: #14532d80 !important;
+}
+.btn-option.wrong {
+  border-color: #ef4444 !important;
+  background: #7f1d1d80 !important;
+}
+
+/* Code block */
+.code-block {
+  background: #0d0d1a;
+  border: 1px solid #2d1f4e;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  white-space: pre;
+  overflow-x: auto;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
