@@ -40,6 +40,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     case "start_question": {
+      // Si no hay preguntas mezcladas, inicializarlas (primera vez)
+      if (state.questionOrder.length === 0) {
+        state.questionOrder = shuffle(QUESTIONS.map((_, i) => i)).slice(0, 10);
+        state.currentQuestion = 0;
+        // Limpiar respuestas previas de los jugadores (por si hubo una ronda anterior)
+        for (const key of Object.keys(state.players)) {
+          state.players[key].score = 0;
+          state.players[key].streak = 0;
+          state.players[key].answers = [];
+        }
+      }
       state.status = "question";
       state.questionStartedAt = Date.now();
       state.updatedAt = Date.now();

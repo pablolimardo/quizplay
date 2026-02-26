@@ -154,11 +154,19 @@ export default function HostPage() {
             <h1 className="text-4xl font-bold" style={{ color: "#a78bfa" }}>🤖 ACPI Quiz</h1>
             <p className="text-gray-400 mt-1">Sala de espera · {players.length} jugadores conectados</p>
           </div>
-          <button onClick={() => hostAction("reset")} disabled={loading}
-            className="py-3 px-8 rounded-xl font-bold text-xl transition-all hover:scale-105 disabled:opacity-50"
-            style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }}>
-            {players.length > 0 ? "▶ Iniciar juego" : "⚙ Preparar juego"}
-          </button>
+          {players.length > 0 ? (
+            <button onClick={() => hostAction("start_question")} disabled={loading}
+              className="py-3 px-8 rounded-xl font-bold text-xl transition-all hover:scale-105 disabled:opacity-50"
+              style={{ background: "linear-gradient(135deg, #22c55e, #16a34a)" }}>
+              ▶ Iniciar juego
+            </button>
+          ) : (
+            <button onClick={() => hostAction("reset")} disabled={loading}
+              className="py-3 px-8 rounded-xl font-bold text-xl transition-all hover:scale-105 disabled:opacity-50"
+              style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }}>
+              ⚙ Preparar juego
+            </button>
+          )}
         </div>
 
         {/* Players grid */}
@@ -167,7 +175,7 @@ export default function HostPage() {
             <div className="flex flex-col items-center justify-center h-64 text-gray-600">
               <div className="text-6xl mb-4">👋</div>
               <p className="text-2xl">Esperando jugadores...</p>
-              <p className="text-lg mt-2">Los alumnos ingresan a <span className="text-purple-400 font-mono">acpi-quiz.vercel.app/play</span></p>
+              <p className="text-lg mt-2">Los alumnos ingresan a <span className="text-purple-400 font-mono">quizplayacpi.vercel.app/play</span></p>
             </div>
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
