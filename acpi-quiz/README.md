@@ -25,7 +25,7 @@ El profesor proyecta las preguntas en la pantalla del aula y los alumnos respond
 
 ### 🎯 Objetivo pedagógico
 
-Transformar la evaluación y el repaso de contenidos en una experiencia **lúdica y motivadora**, donde los alumnos compiten sanamente mientras refuerzan lo aprendido en clase. La herramienta aprovecha las notebooks del aula como **recurso pedagógico**, fomentando un uso responsable y productivo de la tecnología.
+Transformar la evaluación y el repaso de contenidos en una experiencia **lúdica y motivadora**, donde los alumnos compiten sanamente mientras refuerzan lo aprendido en clase. La herramienta aprovecha las notebooks como **recurso pedagógico**, fomentando un uso responsable y productivo de la tecnología.
 
 ---
 
@@ -33,7 +33,7 @@ Transformar la evaluación y el repaso de contenidos en una experiencia **lúdic
 
 | Característica | Descripción |
 |---|---|
-| 🎮 **Quiz en tiempo real** | Los alumnos responden desde las notebooks del aula |
+| 🎮 **Quiz en tiempo real** | Los alumnos responden desde sus notebooks |
 | 💻 **Sin instalación** | No requiere descargar nada, funciona directamente en el navegador |
 | ⏱ **Tiempo configurable** | El profe elige la velocidad: Normal (1x), Doble (2x) o Triple (3x) |
 | 🏆 **Ranking y puntaje** | Sistema de puntos con bonus por rapidez y rachas de aciertos |
@@ -78,18 +78,19 @@ Transformar la evaluación y el repaso de contenidos en una experiencia **lúdic
 
 ## 📚 Contenidos evaluados
 
-La app incluye **20 preguntas** sobre los temas del Taller de Programación:
+La app incluye **20 preguntas** alineadas con la planificación del Taller de Programación 2026:
 
-| Tema | Ejemplos de contenidos |
-|------|----------------------|
-| 🐍 **Python** | Variables, tipos de datos, funciones, bucles, listas, `map()`, slicing |
-| 🧠 **Paradigmas** | Imperativo, Funcional, Orientado a Objetos |
-| 🤖 **Arduino** | `setup()`, `loop()`, `digitalWrite`, `analogRead`, Blink |
-| 🔌 **PyFirmata** | Conexión Python ↔ Arduino, control de pines |
-| 🌐 **HTML** | Estructura, etiquetas semánticas, `<h1>`, `<div>` vs `<span>` |
-| 🎨 **CSS** | Selectores, propiedades, estilos básicos |
+| Trimestre | Tema | Ejemplos de contenidos |
+|-----------|------|------------------------|
+| **1°** | 🧮 **Algoritmos** | Pseudocódigo, diagramas de flujo, concepto de algoritmo |
+| **1°** | 🐍 **Python imperativo** | Variables, tipos de datos, `if/elif/else`, `for`, `while`, funciones |
+| **1°** | 🧩 **Modularización** | Funciones con parámetros, responsabilidades claras |
+| **2°** | λ **Paradigma funcional** | `map()`, `filter()`, `lambda`, recursión con condición de terminación |
+| **2°** | 🔌 **ESP32 y sensores** | Señales analógicas vs digitales, DHT22, PyFirmata |
+| **3°** | 🏗 **POO** | Clases, atributos, métodos, `__init__`, `self`, herencia, polimorfismo |
+| **3°** | 🌡 **Proyecto integrador** | Sistema de climatización con ESP32 + DHT22 + relay |
 
-> Las preguntas incluyen **fragmentos de código real** que los alumnos deben interpretar, y cada respuesta viene acompañada de una **explicación didáctica**.
+> Las preguntas incluyen **fragmentos de código real** que los alumnos deben interpretar, y cada respuesta viene acompañada de una **explicación didáctica**. Varias preguntas están contextualizadas en el proyecto integrador del Sistema de Climatización.
 
 ---
 

@@ -3,20 +3,58 @@ export interface Question {
   id: number;
   topic: string;
   type: "code" | "theory";
-  language?: "python" | "arduino" | "html" | "css";
+  language?: "python" | "pseudocode" | "html" | "css";
   question: string;
   code?: string;
   options: string[];
   correct: number;
   explanation: string;
-  timeLimit: number;
+  timeLimit: number; // segundos base (se multiplica por timeMultiplier)
   points: number;
 }
 
 export const QUESTIONS: Question[] = [
-  // ── PYTHON ──────────────────────────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════════════════════
+  // 1° TRIMESTRE — PARADIGMA IMPERATIVO
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // ── Algoritmos y pseudocódigo ──────────────────────────────────────────
   {
     id: 1,
+    topic: "Algoritmos",
+    type: "theory",
+    question: "¿Qué es un algoritmo?",
+    options: [
+      "Un programa escrito en Python",
+      "Una secuencia ordenada y finita de pasos para resolver un problema",
+      "Un tipo de dato numérico",
+      "Un diagrama de flujo",
+    ],
+    correct: 1,
+    explanation: "Un algoritmo es una secuencia ordenada y finita de pasos que resuelve un problema. Se puede representar en pseudocódigo, diagrama de flujo o código, pero el algoritmo es la IDEA, no el formato.",
+    timeLimit: 20,
+    points: 100,
+  },
+  {
+    id: 2,
+    topic: "Algoritmos",
+    type: "theory",
+    question: "En un diagrama de flujo, ¿qué forma geométrica representa una decisión (if/else)?",
+    options: [
+      "Rectángulo",
+      "Óvalo",
+      "Rombo",
+      "Paralelogramo",
+    ],
+    correct: 2,
+    explanation: "El rombo (diamante) representa una decisión con dos caminos posibles (Sí/No). El rectángulo es un proceso, el óvalo es inicio/fin, y el paralelogramo es entrada/salida de datos.",
+    timeLimit: 20,
+    points: 100,
+  },
+
+  // ── Variables, tipos de datos y expresiones ────────────────────────────
+  {
+    id: 3,
     topic: "Python",
     type: "code",
     language: "python",
@@ -26,58 +64,53 @@ y = 3
 print(x // y)`,
     options: ["3.33", "3", "4", "Error"],
     correct: 1,
-    explanation: "// es la división entera en Python. 10 // 3 = 3 (descarta el resto).",
+    explanation: "// es la división entera en Python. 10 // 3 = 3 (descarta la parte decimal, queda solo la parte entera).",
     timeLimit: 20,
     points: 100,
-  },
-  {
-    id: 2,
-    topic: "Python",
-    type: "code",
-    language: "python",
-    question: "¿Cuál es el resultado?",
-    code: `def saludar(nombre, mensaje="Hola"):
-    return f"{mensaje}, {nombre}!"
-
-print(saludar("Juan"))`,
-    options: ["Error: falta argumento", "Hola, Juan!", "mensaje, Juan!", "None"],
-    correct: 1,
-    explanation: '"mensaje" tiene un valor por defecto ("Hola"), por lo que no es obligatorio pasarlo.',
-    timeLimit: 25,
-    points: 150,
-  },
-  {
-    id: 3,
-    topic: "Python",
-    type: "code",
-    language: "python",
-    question: "¿Qué imprime este bucle?",
-    code: `resultado = 0
-for i in range(1, 5):
-    resultado += i
-print(resultado)`,
-    options: ["10", "15", "4", "14"],
-    correct: 0,
-    explanation: "range(1,5) genera [1,2,3,4]. La suma es 1+2+3+4 = 10.",
-    timeLimit: 25,
-    points: 150,
   },
   {
     id: 4,
     topic: "Python",
     type: "code",
     language: "python",
-    question: "¿Qué tipo de dato es esto?",
-    code: `datos = [1, "hola", True, 3.14]
-print(type(datos))`,
-    options: ["<class 'tuple'>", "<class 'dict'>", "<class 'list'>", "<class 'set'>"],
+    question: "¿Qué tipo de dato es la variable 'dato'?",
+    code: `dato = "25"
+print(type(dato))`,
+    options: ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
     correct: 2,
-    explanation: "Los corchetes [] definen una lista en Python. Puede contener elementos de distintos tipos.",
+    explanation: "Las comillas hacen que '25' sea un STRING (texto), no un número. Para que sea un entero debería escribirse sin comillas: dato = 25.",
     timeLimit: 20,
     points: 100,
   },
+
+  // ── Estructuras de control: selección e iteración ──────────────────────
   {
     id: 5,
+    topic: "Python",
+    type: "code",
+    language: "python",
+    question: "¿Qué imprime este código si temperatura = 32?",
+    code: `temperatura = 32
+
+if temperatura > 30:
+    print("Activar ventilador")
+elif temperatura > 20:
+    print("Temperatura OK")
+else:
+    print("Activar calefacción")`,
+    options: [
+      "Temperatura OK",
+      "Activar ventilador",
+      "Activar calefacción",
+      "Activar ventilador y Temperatura OK",
+    ],
+    correct: 1,
+    explanation: "32 > 30 es True, así que entra en el primer bloque if y ejecuta 'Activar ventilador'. Como ya entró en un bloque, los elif y else se ignoran.",
+    timeLimit: 25,
+    points: 150,
+  },
+  {
+    id: 6,
     topic: "Python",
     type: "code",
     language: "python",
@@ -89,253 +122,88 @@ while i < 5:
     i += 1`,
     options: ["2", "3", "4", "5"],
     correct: 1,
-    explanation: "i toma valores 0,1,2,3,4. Los pares son 0, 2 y 4 → se imprime 3 veces.",
-    timeLimit: 30,
-    points: 200,
-  },
-  {
-    id: 6,
-    topic: "Python",
-    type: "code",
-    language: "python",
-    question: "¿Qué devuelve esta función?",
-    code: `def misterio(lista):
-    return lista[-1]
-
-print(misterio([10, 20, 30, 40]))`,
-    options: ["10", "Error", "40", "None"],
-    correct: 2,
-    explanation: "El índice -1 accede al ÚLTIMO elemento de una lista. La lista tiene 4 elementos, el último es 40.",
-    timeLimit: 20,
-    points: 100,
+    explanation: "i toma valores 0, 1, 2, 3, 4. Los pares (i % 2 == 0) son 0, 2 y 4 → se imprime 'beep' 3 veces.",
+    timeLimit: 25,
+    points: 150,
   },
   {
     id: 7,
     topic: "Python",
-    type: "theory",
-    question: "¿Qué paradigma de programación se caracteriza por ejecutar instrucciones paso a paso, como una receta?",
-    options: ["Orientado a Objetos", "Funcional", "Imperativo", "Declarativo"],
-    correct: 2,
-    explanation: "El paradigma Imperativo describe CÓMO hacer las cosas, paso a paso. Es el más parecido a una receta de cocina.",
-    timeLimit: 20,
-    points: 100,
+    type: "code",
+    language: "python",
+    question: "¿Qué imprime este bucle for?",
+    code: `resultado = 0
+for i in range(1, 5):
+    resultado += i
+print(resultado)`,
+    options: ["10", "15", "4", "14"],
+    correct: 0,
+    explanation: "range(1, 5) genera los números 1, 2, 3, 4 (el 5 NO se incluye). La suma es 1+2+3+4 = 10.",
+    timeLimit: 25,
+    points: 150,
   },
+
+  // ── Funciones, parámetros y modularización ─────────────────────────────
   {
     id: 8,
     topic: "Python",
     type: "code",
     language: "python",
-    question: "¿Cuál es el OUTPUT de este código?",
-    code: `numeros = [5, 2, 8, 1, 9]
-numeros.sort()
-print(numeros[0])`,
-    options: ["5", "9", "1", "2"],
-    correct: 2,
-    explanation: ".sort() ordena la lista de menor a mayor. Después del sort: [1,2,5,8,9]. El índice 0 es 1.",
+    question: "¿Cuál es el resultado?",
+    code: `def saludar(nombre, mensaje="Hola"):
+    return f"{mensaje}, {nombre}!"
+
+print(saludar("Juan"))`,
+    options: ["Error: falta argumento", "Hola, Juan!", "mensaje, Juan!", "None"],
+    correct: 1,
+    explanation: '"mensaje" tiene un valor por defecto ("Hola"), por lo que no es obligatorio pasarlo. Se le pasa solo "Juan" como nombre, y mensaje queda como "Hola".',
     timeLimit: 25,
     points: 150,
   },
-
-  // ── PARADIGMAS ──────────────────────────────────────────────────────────
   {
     id: 9,
-    topic: "Paradigmas",
+    topic: "Python",
     type: "theory",
-    question: "En Programación Orientada a Objetos, ¿cómo se llama el 'molde' que usás para crear objetos?",
-    options: ["Función", "Módulo", "Clase", "Variable"],
-    correct: 2,
-    explanation: "La CLASE es el molde o plano. A partir de una clase creás múltiples objetos (instancias) con las mismas propiedades.",
+    question: "¿Qué significa 'modularizar' un programa?",
+    options: [
+      "Escribir todo el código en un solo bloque largo",
+      "Dividir el programa en funciones con responsabilidades claras",
+      "Usar solo variables globales",
+      "Eliminar los comentarios del código",
+    ],
+    correct: 1,
+    explanation: "Modularizar es dividir un programa en partes más pequeñas (funciones/módulos) donde cada una tiene una responsabilidad clara. Esto hace el código más legible, reutilizable y fácil de depurar.",
     timeLimit: 20,
     points: 100,
   },
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 2° TRIMESTRE — PARADIGMA FUNCIONAL + HARDWARE
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // ── Paradigma funcional ────────────────────────────────────────────────
   {
     id: 10,
-    topic: "Paradigmas",
+    topic: "Funcional",
     type: "theory",
-    question: "En el paradigma Funcional, ¿qué característica tienen las funciones puras?",
+    question: "¿Cuál es la principal diferencia entre el paradigma imperativo y el funcional?",
     options: [
-      "Modifican variables globales",
-      "Siempre devuelven el mismo resultado para los mismos inputs",
-      "Solo pueden recibir un argumento",
-      "Deben usar bucles for",
+      "El funcional solo usa números, el imperativo usa texto",
+      "El imperativo modifica el estado del programa paso a paso, el funcional opera sin modificar estado",
+      "No hay diferencia, son sinónimos",
+      "El funcional no puede usar variables",
     ],
     correct: 1,
-    explanation: "Una función pura siempre da el mismo resultado si le das los mismos inputs, y no tiene efectos secundarios.",
+    explanation: "En el paradigma imperativo, cambiás el estado del programa con asignaciones y bucles. En el funcional, operás sobre datos sin modificar el estado original: las funciones reciben datos y devuelven nuevos datos.",
     timeLimit: 25,
     points: 150,
   },
   {
     id: 11,
-    topic: "Paradigmas",
+    topic: "Funcional",
     type: "code",
     language: "python",
-    question: "Este código usa el paradigma...",
-    code: `class Sensor:
-    def __init__(self, nombre):
-        self.nombre = nombre
-    def leer(self):
-        return f"{self.nombre}: activo"
-
-s = Sensor("Temperatura")
-print(s.leer())`,
-    options: ["Imperativo", "Funcional", "Orientado a Objetos", "Declarativo"],
-    correct: 2,
-    explanation: "Usamos class, __init__, self y creamos una instancia (s). Eso es POO (Programación Orientada a Objetos).",
-    timeLimit: 25,
-    points: 150,
-  },
-
-  // ── ARDUINO ─────────────────────────────────────────────────────────────
-  {
-    id: 12,
-    topic: "Arduino",
-    type: "code",
-    language: "arduino",
-    question: "¿Qué hace este fragmento de código Arduino?",
-    code: `void setup() {
-  pinMode(13, OUTPUT);
-}
-void loop() {
-  digitalWrite(13, HIGH);
-  delay(1000);
-  digitalWrite(13, LOW);
-  delay(1000);
-}`,
-    options: [
-      "Lee un sensor cada 1 segundo",
-      "Hace parpadear el LED del pin 13 cada 1 segundo",
-      "Enciende el LED 13 para siempre",
-      "Genera un error: falta Serial.begin()",
-    ],
-    correct: 1,
-    explanation: "HIGH enciende el LED → espera 1s → LOW lo apaga → espera 1s → repite. ¡Es el clásico Blink!",
-    timeLimit: 25,
-    points: 150,
-  },
-  {
-    id: 13,
-    topic: "Arduino",
-    type: "theory",
-    question: "¿Para qué sirve la función setup() en Arduino?",
-    options: [
-      "Se ejecuta en bucle infinito",
-      "Lee valores analógicos",
-      "Se ejecuta UNA sola vez al iniciar el programa",
-      "Configura la conexión WiFi",
-    ],
-    correct: 2,
-    explanation: "setup() corre una sola vez al encender o resetear el Arduino. Ahí configurás pines, Serial, etc.",
-    timeLimit: 20,
-    points: 100,
-  },
-  {
-    id: 14,
-    topic: "Arduino",
-    type: "theory",
-    question: "¿Qué rango de valores devuelve analogRead() en Arduino UNO?",
-    options: ["0 a 100", "0 a 255", "0 a 1023", "0 a 5"],
-    correct: 2,
-    explanation: "Arduino UNO tiene un ADC de 10 bits: 2^10 = 1024 valores posibles, de 0 a 1023.",
-    timeLimit: 20,
-    points: 100,
-  },
-  {
-    id: 15,
-    topic: "Arduino",
-    type: "theory",
-    question: "En PyFirmata, ¿qué biblioteca de Python usamos para controlar Arduino?",
-    options: ["pygame", "pyfirmata", "pyserial directamente", "opencv"],
-    correct: 1,
-    explanation: "PyFirmata es la biblioteca que permite controlar un Arduino desde Python usando el protocolo Firmata.",
-    timeLimit: 20,
-    points: 100,
-  },
-  {
-    id: 16,
-    topic: "Arduino",
-    type: "code",
-    language: "python",
-    question: "¿Qué hace este código con PyFirmata?",
-    code: `import pyfirmata
-board = pyfirmata.Arduino('/dev/ttyUSB0')
-led = board.get_pin('d:13:o')
-led.write(1)`,
-    options: [
-      "Lee el estado del pin 13",
-      "Enciende el LED conectado al pin digital 13",
-      "Configura el pin 13 como entrada analógica",
-      "Genera un error de conexión",
-    ],
-    correct: 1,
-    explanation: "'d:13:o' = pin Digital 13, modo Output. write(1) lo pone en HIGH → enciende el LED.",
-    timeLimit: 30,
-    points: 200,
-  },
-
-  // ── HTML / CSS ───────────────────────────────────────────────────────────
-  {
-    id: 17,
-    topic: "HTML",
-    type: "code",
-    language: "html",
-    question: "¿Qué etiqueta usamos para el título principal de una página?",
-    code: `<!DOCTYPE html>
-<html>
-  <body>
-    <___>Mi Proyecto Arduino</___ >
-    <p>Descripción del sensor</p>
-  </body>
-</html>`,
-    options: ["<title>", "<h1>", "<header>", "<main>"],
-    correct: 1,
-    explanation: "<h1> es el encabezado más importante (hay del h1 al h6). <title> es el nombre en la pestaña del navegador.",
-    timeLimit: 20,
-    points: 100,
-  },
-  {
-    id: 18,
-    topic: "CSS",
-    type: "code",
-    language: "css",
-    question: "¿Qué hace este estilo CSS?",
-    code: `h1 {
-  color: red;
-  font-size: 32px;
-  text-align: center;
-}`,
-    options: [
-      "Cambia el fondo de h1 a rojo",
-      "Centra el h1, lo pone rojo y de 32px",
-      "Solo cambia el color del texto",
-      "Aplica a todos los elementos de la página",
-    ],
-    correct: 1,
-    explanation: "Ese bloque CSS aplica 3 estilos al h1: color de texto rojo, tamaño 32px y alineado al centro.",
-    timeLimit: 20,
-    points: 100,
-  },
-  {
-    id: 19,
-    topic: "HTML",
-    type: "theory",
-    question: "¿Cuál es la diferencia entre <div> y <span>?",
-    options: [
-      "No hay diferencia, son sinónimos",
-      "<div> es bloque (ocupa toda la línea), <span> es en línea",
-      "<span> solo se usa para imágenes",
-      "<div> es para CSS y <span> es para HTML",
-    ],
-    correct: 1,
-    explanation: "<div> es un contenedor de bloque (rompe la línea). <span> es inline, no interrumpe el flujo del texto.",
-    timeLimit: 25,
-    points: 150,
-  },
-  {
-    id: 20,
-    topic: "Python",
-    type: "code",
-    language: "python",
-    question: "¿Cuánto vale 'resultado' al final?",
+    question: "¿Cuánto vale resultado[2]?",
     code: `def doble(n):
     return n * 2
 
@@ -344,9 +212,177 @@ resultado = list(map(doble, numeros))
 print(resultado[2])`,
     options: ["3", "4", "6", "10"],
     correct: 2,
-    explanation: "map() aplica doble() a cada elemento: [2,4,6,8,10]. El índice [2] es el tercer elemento: 6.",
+    explanation: "map() aplica la función doble() a cada elemento de la lista: [2, 4, 6, 8, 10]. El índice [2] es el tercer elemento: 6.",
+    timeLimit: 25,
+    points: 150,
+  },
+  {
+    id: 12,
+    topic: "Funcional",
+    type: "code",
+    language: "python",
+    question: "¿Qué devuelve esta función recursiva con factorial(4)?",
+    code: `def factorial(n):
+    if n <= 1:      # condición de terminación
+        return 1
+    return n * factorial(n - 1)
+
+print(factorial(4))`,
+    options: ["4", "10", "24", "Error: recursión infinita"],
+    correct: 2,
+    explanation: "factorial(4) = 4 × factorial(3) = 4 × 3 × factorial(2) = 4 × 3 × 2 × factorial(1) = 4 × 3 × 2 × 1 = 24. La condición de terminación (n <= 1) frena la recursión.",
     timeLimit: 30,
     points: 200,
+  },
+  {
+    id: 13,
+    topic: "Funcional",
+    type: "code",
+    language: "python",
+    question: "¿Qué imprime este código que usa filter()?",
+    code: `temperaturas = [18, 25, 31, 22, 35, 28]
+altas = list(filter(lambda t: t > 30, temperaturas))
+print(altas)`,
+    options: ["[18, 25, 22, 28]", "[31, 35]", "[35]", "Error"],
+    correct: 1,
+    explanation: "filter() filtra los elementos que cumplen la condición. lambda t: t > 30 deja solo los valores mayores a 30: el 31 y el 35. Resultado: [31, 35].",
+    timeLimit: 30,
+    points: 200,
+  },
+
+  // ── ESP32, PyFirmata y sensores ────────────────────────────────────────
+  {
+    id: 14,
+    topic: "ESP32",
+    type: "theory",
+    question: "¿Qué ventaja tiene el ESP32 sobre el Arduino UNO clásico?",
+    options: [
+      "El ESP32 es más grande y pesado",
+      "El ESP32 tiene WiFi y Bluetooth integrados",
+      "El Arduino UNO tiene más memoria",
+      "No hay diferencia, son la misma placa",
+    ],
+    correct: 1,
+    explanation: "El ESP32 tiene WiFi y Bluetooth integrados, más memoria, más pines y doble núcleo. Es ideal para proyectos IoT como nuestro sistema de climatización.",
+    timeLimit: 20,
+    points: 100,
+  },
+  {
+    id: 15,
+    topic: "Sensores",
+    type: "theory",
+    question: "¿Cuál es la diferencia entre una señal analógica y una digital?",
+    options: [
+      "La analógica solo vale 0 o 1, la digital tiene muchos valores",
+      "La digital solo vale 0 o 1 (HIGH/LOW), la analógica varía en un rango continuo",
+      "No hay diferencia, son lo mismo",
+      "La analógica se mide en grados y la digital en voltios",
+    ],
+    correct: 1,
+    explanation: "Una señal DIGITAL tiene solo dos estados: 0 (LOW) o 1 (HIGH). Una señal ANALÓGICA varía de forma continua en un rango (por ejemplo, 0 a 3.3V en el ESP32), y se convierte a un número con el ADC.",
+    timeLimit: 25,
+    points: 150,
+  },
+  {
+    id: 16,
+    topic: "Sensores",
+    type: "theory",
+    question: "El sensor DHT22 mide...",
+    options: [
+      "Solo temperatura",
+      "Solo humedad",
+      "Temperatura y humedad",
+      "Presión atmosférica",
+    ],
+    correct: 2,
+    explanation: "El DHT22 es un sensor que mide tanto temperatura como humedad relativa del ambiente. Es una señal digital que se lee desde un solo pin de datos.",
+    timeLimit: 15,
+    points: 100,
+  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 3° TRIMESTRE — PARADIGMA ORIENTADO A OBJETOS
+  // ══════════════════════════════════════════════════════════════════════════
+
+  {
+    id: 17,
+    topic: "POO",
+    type: "theory",
+    question: "En Programación Orientada a Objetos, ¿cómo se llama el 'molde' que usás para crear objetos?",
+    options: ["Función", "Módulo", "Clase", "Variable"],
+    correct: 2,
+    explanation: "La CLASE es el molde o plano. A partir de una clase creás múltiples objetos (instancias) con las mismas propiedades y comportamientos.",
+    timeLimit: 20,
+    points: 100,
+  },
+  {
+    id: 18,
+    topic: "POO",
+    type: "code",
+    language: "python",
+    question: "¿Qué imprime este código?",
+    code: `class Sensor:
+    def __init__(self, nombre, unidad):
+        self.nombre = nombre
+        self.unidad = unidad
+    def describir(self):
+        return f"{self.nombre} (mide en {self.unidad})"
+
+s = Sensor("DHT22", "°C")
+print(s.describir())`,
+    options: [
+      "Error: falta self",
+      "DHT22 (mide en °C)",
+      "Sensor (mide en unidad)",
+      "None",
+    ],
+    correct: 1,
+    explanation: "Se crea una instancia 's' de la clase Sensor con nombre='DHT22' y unidad='°C'. Al llamar s.describir(), usa self.nombre y self.unidad para armar el string.",
+    timeLimit: 30,
+    points: 200,
+  },
+  {
+    id: 19,
+    topic: "POO",
+    type: "code",
+    language: "python",
+    question: "¿Qué concepto de POO se aplica acá?",
+    code: `class Dispositivo:
+    def encender(self):
+        print("Dispositivo encendido")
+
+class Ventilador(Dispositivo):
+    def encender(self):
+        print("Ventilador girando")
+
+v = Ventilador()
+v.encender()`,
+    options: [
+      "Encapsulamiento",
+      "Herencia y polimorfismo",
+      "Recursión",
+      "Paradigma funcional",
+    ],
+    correct: 1,
+    explanation: "Ventilador HEREDA de Dispositivo (class Ventilador(Dispositivo)). Además hay POLIMORFISMO: Ventilador redefine el método encender() con su propio comportamiento. Se imprime 'Ventilador girando'.",
+    timeLimit: 30,
+    points: 200,
+  },
+  {
+    id: 20,
+    topic: "Proyecto",
+    type: "theory",
+    question: "En el proyecto integrador del Sistema de Climatización, ¿qué función cumple el relay (relé)?",
+    options: [
+      "Mide la temperatura del ambiente",
+      "Actúa como interruptor controlado eléctricamente para encender/apagar el actuador",
+      "Envía datos por WiFi al celular",
+      "Almacena los datos de temperatura en la nube",
+    ],
+    correct: 1,
+    explanation: "El relay es un interruptor electromagnético. El ESP32 le envía una señal digital (HIGH/LOW) para encender o apagar un actuador (ventilador, calefactor) según la lógica del programa.",
+    timeLimit: 25,
+    points: 150,
   },
 ];
 
