@@ -1,7 +1,8 @@
 // pages/host.tsx
 import { useEffect, useState, useCallback, useRef } from "react";
 import { GameState } from "../lib/gameState";
-import { QUESTIONS } from "../lib/questions";
+import { getQuestionsByQuizId, QUIZ_LIST, QuizDefinition } from "../lib/quizzes";
+import { Question } from "../lib/questions";
 
 const HOST_CODE = "acpi2026";
 
@@ -44,6 +45,7 @@ function CircularTimer({ timeLeft, total }: { timeLeft: number; total: number })
 
 /** Genera y descarga un CSV con los resultados de los alumnos */
 function downloadResultsCSV(state: GameState) {
+  const questions = getQuestionsByQuizId(state.selectedQuiz || "programacion");
   const players = Object.values(state.players).sort((a, b) => b.score - a.score);
   const questionCount = state.questionOrder.length;
 
@@ -58,7 +60,7 @@ function downloadResultsCSV(state: GameState) {
     "Total preguntas",
     "Precisión (%)",
     ...state.questionOrder.map((qIdx, i) => {
-      const q = QUESTIONS[qIdx];
+      const q = questions[qIdx];
       return `P${i + 1} - ${q.topic}`;
     }),
   ];
@@ -100,8 +102,9 @@ function downloadResultsCSV(state: GameState) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   const fecha = new Date().toISOString().slice(0, 10);
+  const quizName = (state.selectedQuiz || "programacion").replace(/[^a-zA-Z0-9-]/g, "_");
   a.href = url;
-  a.download = `ACPI_Quiz_Resultados_${fecha}.csv`;
+  a.download = `Quiz_${quizName}_Resultados_${fecha}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -114,6 +117,11 @@ export default function HostPage() {
   const [timeLeft, setTimeLeft] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Obtener preguntas del quiz seleccionado
+  const selectedQuizId = state?.selectedQuiz || "programacion";
+  const QUESTIONS = getQuestionsByQuizId(selectedQuizId);
+  const activeQuizDef = QUIZ_LIST.find(q => q.id === selectedQuizId) ?? QUIZ_LIST[0];
 
   // Auto-reconectar sesión del profe desde localStorage
   useEffect(() => {
@@ -225,7 +233,9 @@ export default function HostPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold" style={{ color: "#a78bfa" }}>🤖 ACPI Quiz</h1>
-            <p className="text-gray-400 mt-1">Sala de espera · {players.length} jugadores conectados</p>
+            <p className="text-gray-400 mt-1">
+              {activeQuizDef.emoji} {activeQuizDef.name} · {players.length} jugadores conectados
+            </p>
           </div>
           {players.length > 0 ? (
             <button onClick={() => hostAction("start_question")} disabled={loading}
@@ -265,8 +275,49 @@ export default function HostPage() {
           )}
         </div>
 
-        {/* Configuración de tiempo */}
+        {/* Selector de Quiz */}
         <div className="mt-6 rounded-2xl p-5" style={{ background: "#1a1030", border: "1px solid #2d1f4e" }}>
+          <div className="mb-4">
+            <h3 className="font-bold text-lg">📚 Seleccionar Quiz</h3>
+            <p className="text-gray-500 text-sm">Elegí el tema de preguntas para esta ronda</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {QUIZ_LIST.map((quiz) => {
+              const isActive = selectedQuizId === quiz.id;
+              return (
+                <button
+                  key={quiz.id}
+                  onClick={() => hostAction("select_quiz", { quizId: quiz.id })}
+                  disabled={loading}
+                  className="rounded-xl p-4 text-left transition-all hover:scale-[1.03] disabled:opacity-50"
+                  style={{
+                    background: isActive
+                      ? "linear-gradient(135deg, #2d1f4e, #1a1030)"
+                      : "#0d0b1a",
+                    border: isActive
+                      ? "2px solid #a78bfa"
+                      : "2px solid #2d1f4e",
+                    boxShadow: isActive
+                      ? "0 0 20px rgba(167, 139, 250, 0.2)"
+                      : "none",
+                  }}
+                >
+                  <div className="text-2xl mb-2">{quiz.emoji}</div>
+                  <div className="font-bold text-sm mb-1" style={{ color: isActive ? "#a78bfa" : "#e2e8f0" }}>
+                    {quiz.name}
+                  </div>
+                  <div className="text-xs text-gray-500 leading-snug">{quiz.description}</div>
+                  <div className="text-xs mt-2 font-mono" style={{ color: isActive ? "#22c55e" : "#6b7280" }}>
+                    {quiz.questions.length} preguntas
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Configuración de tiempo */}
+        <div className="mt-4 rounded-2xl p-5" style={{ background: "#1a1030", border: "1px solid #2d1f4e" }}>
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-bold text-lg">⏱ Tiempo por pregunta</h3>

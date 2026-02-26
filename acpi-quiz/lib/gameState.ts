@@ -24,6 +24,7 @@ export interface GameState {
   questionOrder: number[]; // índices mezclados de preguntas
   previousQuestions: number[]; // preguntas de la ronda anterior (para no repetir)
   timeMultiplier: number; // multiplicador de tiempo (1 = normal, 2 = doble, etc.)
+  selectedQuiz: string; // ID del quiz seleccionado
   updatedAt: number;
 }
 
@@ -36,5 +37,6 @@ export const DEFAULT_STATE: GameState = {
   questionOrder: [],
   previousQuestions: [],
   timeMultiplier: 2, // doble de tiempo por defecto
+  selectedQuiz: "programacion", // quiz por defecto
   updatedAt: Date.now(),
 };

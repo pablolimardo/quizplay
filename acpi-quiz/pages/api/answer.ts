@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { redis } from "../../lib/redis";
 import { GameState, DEFAULT_STATE } from "../../lib/gameState";
-import { QUESTIONS } from "../../lib/questions";
+import { getQuestionsByQuizId } from "../../lib/quizzes";
 
 const KEY = "acpi_quiz_state";
 
@@ -23,8 +23,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(404).json({ error: "Jugador no encontrado" });
   }
 
+  const questions = getQuestionsByQuizId(state.selectedQuiz || "programacion");
   const qIdx = state.questionOrder[state.currentQuestion];
-  const question = QUESTIONS[qIdx];
+  const question = questions[qIdx];
 
   // Verificar si ya respondió esta pregunta
   if (player.answers.length > state.currentQuestion) {

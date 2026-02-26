@@ -1,7 +1,7 @@
 // pages/play.tsx
 import { useEffect, useState, useCallback, useRef } from "react";
 import { GameState } from "../lib/gameState";
-import { QUESTIONS } from "../lib/questions";
+import { getQuestionsByQuizId } from "../lib/quizzes";
 
 const OPTION_LETTERS = ["A", "B", "C", "D"];
 const OPTION_COLORS = ["#3b82f6", "#a855f7", "#f59e0b", "#ec4899"];
@@ -90,8 +90,9 @@ export default function PlayPage() {
   // Timer
   useEffect(() => {
     if (!state || state.status !== "question") { setTimeLeft(0); return; }
+    const questions = getQuestionsByQuizId(state.selectedQuiz || "programacion");
     const qIdx = state.questionOrder[state.currentQuestion];
-    const q = QUESTIONS[qIdx];
+    const q = questions[qIdx];
     const multiplier = state.timeMultiplier ?? 2;
     const totalTime = Math.round(q.timeLimit * multiplier);
     const elapsed = Math.floor((Date.now() - state.questionStartedAt) / 1000);
@@ -203,8 +204,9 @@ export default function PlayPage() {
 
   // ── QUESTION ──
   if (state.status === "question") {
+    const questions = getQuestionsByQuizId(state.selectedQuiz || "programacion");
     const qIdx = state.questionOrder[state.currentQuestion];
-    const q = QUESTIONS[qIdx];
+    const q = questions[qIdx];
     const alreadyAnswered = selectedAnswer !== null || answerResult !== null;
     const actualTimeLimit = Math.round(q.timeLimit * (state.timeMultiplier ?? 2));
     const pct = Math.round((timeLeft / actualTimeLimit) * 100);
