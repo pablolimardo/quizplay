@@ -5,6 +5,8 @@ import { PROGRAMACION_QUESTIONS } from "./programacion";
 import { ACPI_GENERAL_QUESTIONS } from "./acpi-general";
 import { MMO_QUESTIONS } from "./mmo";
 import { ESCUELA_QUESTIONS } from "./escuela";
+import { PROG_GENERAL_QUESTIONS } from "./prog-general";
+import { PROG_ESTRUCTURADA_QUESTIONS } from "./prog-estructurada";
 
 export interface QuizDefinition {
   id: string;
@@ -42,6 +44,20 @@ export const QUIZ_LIST: QuizDefinition[] = [
     emoji: "🎓",
     description: "Ciencia, tecnología, educación técnica, cultura escolar",
     questions: ESCUELA_QUESTIONS,
+  },
+  {
+    id: "prog-general-3ro",
+    name: "Programación 3° - General",
+    emoji: "🚀",
+    description: "Diseño, Funcional, Imperativo y POO - 10 preguntas",
+    questions: PROG_GENERAL_QUESTIONS,
+  },
+  {
+    id: "prog-estructurada-3ro",
+    name: "Programación 3° - Algoritmos",
+    emoji: "🧠",
+    description: "Diseño de algoritmos, paradigma imperativo, secuencias y selección - 5 preguntas",
+    questions: PROG_ESTRUCTURADA_QUESTIONS,
   },
 ];
 

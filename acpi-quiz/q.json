@@ -1,0 +1,1607 @@
+{
+  "static": [
+    {
+      "id": "programacion",
+      "name": "Programación (ACPI)",
+      "emoji": "💻",
+      "description": "Python, algoritmos, POO, paradigma funcional, ESP32 y sensores",
+      "questions": [
+        {
+          "id": 1,
+          "topic": "Algoritmos",
+          "type": "theory",
+          "question": "¿Qué es un algoritmo?",
+          "options": [
+            "Un programa escrito en Python",
+            "Una secuencia ordenada y finita de pasos para resolver un problema",
+            "Un tipo de dato numérico",
+            "Un diagrama de flujo"
+          ],
+          "correct": 1,
+          "explanation": "Un algoritmo es una secuencia ordenada y finita de pasos que resuelve un problema. Se puede representar en pseudocódigo, diagrama de flujo o código, pero el algoritmo es la IDEA, no el formato.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 2,
+          "topic": "Algoritmos",
+          "type": "theory",
+          "question": "En un diagrama de flujo, ¿qué forma geométrica representa una decisión (if/else)?",
+          "options": [
+            "Rectángulo",
+            "Óvalo",
+            "Rombo",
+            "Paralelogramo"
+          ],
+          "correct": 2,
+          "explanation": "El rombo (diamante) representa una decisión con dos caminos posibles (Sí/No). El rectángulo es un proceso, el óvalo es inicio/fin, y el paralelogramo es entrada/salida de datos.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 3,
+          "topic": "Python",
+          "type": "code",
+          "language": "python",
+          "question": "¿Qué imprime este código?",
+          "code": "x = 10\ny = 3\nprint(x // y)",
+          "options": [
+            "3.33",
+            "3",
+            "4",
+            "Error"
+          ],
+          "correct": 1,
+          "explanation": "// es la división entera en Python. 10 // 3 = 3 (descarta la parte decimal, queda solo la parte entera).",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 4,
+          "topic": "Python",
+          "type": "code",
+          "language": "python",
+          "question": "¿Qué tipo de dato es la variable 'dato'?",
+          "code": "dato = \"25\"\nprint(type(dato))",
+          "options": [
+            "<class 'int'>",
+            "<class 'float'>",
+            "<class 'str'>",
+            "<class 'bool'>"
+          ],
+          "correct": 2,
+          "explanation": "Las comillas hacen que '25' sea un STRING (texto), no un número. Para que sea un entero debería escribirse sin comillas: dato = 25.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 5,
+          "topic": "Python",
+          "type": "code",
+          "language": "python",
+          "question": "¿Qué imprime este código si temperatura = 32?",
+          "code": "temperatura = 32\n\nif temperatura > 30:\n    print(\"Activar ventilador\")\nelif temperatura > 20:\n    print(\"Temperatura OK\")\nelse:\n    print(\"Activar calefacción\")",
+          "options": [
+            "Temperatura OK",
+            "Activar ventilador",
+            "Activar calefacción",
+            "Activar ventilador y Temperatura OK"
+          ],
+          "correct": 1,
+          "explanation": "32 > 30 es True, así que entra en el primer bloque if y ejecuta 'Activar ventilador'. Como ya entró en un bloque, los elif y else se ignoran.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 6,
+          "topic": "Python",
+          "type": "code",
+          "language": "python",
+          "question": "¿Cuántas veces se imprime 'beep'?",
+          "code": "i = 0\nwhile i < 5:\n    if i % 2 == 0:\n        print(\"beep\")\n    i += 1",
+          "options": [
+            "2",
+            "3",
+            "4",
+            "5"
+          ],
+          "correct": 1,
+          "explanation": "i toma valores 0, 1, 2, 3, 4. Los pares (i % 2 == 0) son 0, 2 y 4 → se imprime 'beep' 3 veces.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 7,
+          "topic": "Python",
+          "type": "code",
+          "language": "python",
+          "question": "¿Qué imprime este bucle for?",
+          "code": "resultado = 0\nfor i in range(1, 5):\n    resultado += i\nprint(resultado)",
+          "options": [
+            "10",
+            "15",
+            "4",
+            "14"
+          ],
+          "correct": 0,
+          "explanation": "range(1, 5) genera los números 1, 2, 3, 4 (el 5 NO se incluye). La suma es 1+2+3+4 = 10.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 8,
+          "topic": "Python",
+          "type": "code",
+          "language": "python",
+          "question": "¿Cuál es el resultado?",
+          "code": "def saludar(nombre, mensaje=\"Hola\"):\n    return f\"{mensaje}, {nombre}!\"\n\nprint(saludar(\"Juan\"))",
+          "options": [
+            "Error: falta argumento",
+            "Hola, Juan!",
+            "mensaje, Juan!",
+            "None"
+          ],
+          "correct": 1,
+          "explanation": "\"mensaje\" tiene un valor por defecto (\"Hola\"), por lo que no es obligatorio pasarlo. Se le pasa solo \"Juan\" como nombre, y mensaje queda como \"Hola\".",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 9,
+          "topic": "Python",
+          "type": "theory",
+          "question": "¿Qué significa 'modularizar' un programa?",
+          "options": [
+            "Escribir todo el código en un solo bloque largo",
+            "Dividir el programa en funciones con responsabilidades claras",
+            "Usar solo variables globales",
+            "Eliminar los comentarios del código"
+          ],
+          "correct": 1,
+          "explanation": "Modularizar es dividir un programa en partes más pequeñas (funciones/módulos) donde cada una tiene una responsabilidad clara. Esto hace el código más legible, reutilizable y fácil de depurar.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 10,
+          "topic": "Funcional",
+          "type": "theory",
+          "question": "¿Cuál es la principal diferencia entre el paradigma imperativo y el funcional?",
+          "options": [
+            "El funcional solo usa números, el imperativo usa texto",
+            "El imperativo modifica el estado del programa paso a paso, el funcional opera sin modificar estado",
+            "No hay diferencia, son sinónimos",
+            "El funcional no puede usar variables"
+          ],
+          "correct": 1,
+          "explanation": "En el paradigma imperativo, cambiás el estado del programa con asignaciones y bucles. En el funcional, operás sobre datos sin modificar el estado original: las funciones reciben datos y devuelven nuevos datos.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 11,
+          "topic": "Funcional",
+          "type": "code",
+          "language": "python",
+          "question": "¿Cuánto vale resultado[2]?",
+          "code": "def doble(n):\n    return n * 2\n\nnumeros = [1, 2, 3, 4, 5]\nresultado = list(map(doble, numeros))\nprint(resultado[2])",
+          "options": [
+            "3",
+            "4",
+            "6",
+            "10"
+          ],
+          "correct": 2,
+          "explanation": "map() aplica la función doble() a cada elemento de la lista: [2, 4, 6, 8, 10]. El índice [2] es el tercer elemento: 6.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 12,
+          "topic": "Funcional",
+          "type": "code",
+          "language": "python",
+          "question": "¿Qué devuelve esta función recursiva con factorial(4)?",
+          "code": "def factorial(n):\n    if n <= 1:      # condición de terminación\n        return 1\n    return n * factorial(n - 1)\n\nprint(factorial(4))",
+          "options": [
+            "4",
+            "10",
+            "24",
+            "Error: recursión infinita"
+          ],
+          "correct": 2,
+          "explanation": "factorial(4) = 4 × factorial(3) = 4 × 3 × factorial(2) = 4 × 3 × 2 × factorial(1) = 4 × 3 × 2 × 1 = 24. La condición de terminación (n <= 1) frena la recursión.",
+          "timeLimit": 30,
+          "points": 200
+        },
+        {
+          "id": 13,
+          "topic": "Funcional",
+          "type": "code",
+          "language": "python",
+          "question": "¿Qué imprime este código que usa filter()?",
+          "code": "temperaturas = [18, 25, 31, 22, 35, 28]\naltas = list(filter(lambda t: t > 30, temperaturas))\nprint(altas)",
+          "options": [
+            "[18, 25, 22, 28]",
+            "[31, 35]",
+            "[35]",
+            "Error"
+          ],
+          "correct": 1,
+          "explanation": "filter() filtra los elementos que cumplen la condición. lambda t: t > 30 deja solo los valores mayores a 30: el 31 y el 35. Resultado: [31, 35].",
+          "timeLimit": 30,
+          "points": 200
+        },
+        {
+          "id": 14,
+          "topic": "ESP32",
+          "type": "theory",
+          "question": "¿Qué ventaja tiene el ESP32 sobre el Arduino UNO clásico?",
+          "options": [
+            "El ESP32 es más grande y pesado",
+            "El ESP32 tiene WiFi y Bluetooth integrados",
+            "El Arduino UNO tiene más memoria",
+            "No hay diferencia, son la misma placa"
+          ],
+          "correct": 1,
+          "explanation": "El ESP32 tiene WiFi y Bluetooth integrados, más memoria, más pines y doble núcleo. Es ideal para proyectos IoT como nuestro sistema de climatización.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 15,
+          "topic": "Sensores",
+          "type": "theory",
+          "question": "¿Cuál es la diferencia entre una señal analógica y una digital?",
+          "options": [
+            "La analógica solo vale 0 o 1, la digital tiene muchos valores",
+            "La digital solo vale 0 o 1 (HIGH/LOW), la analógica varía en un rango continuo",
+            "No hay diferencia, son lo mismo",
+            "La analógica se mide en grados y la digital en voltios"
+          ],
+          "correct": 1,
+          "explanation": "Una señal DIGITAL tiene solo dos estados: 0 (LOW) o 1 (HIGH). Una señal ANALÓGICA varía de forma continua en un rango (por ejemplo, 0 a 3.3V en el ESP32), y se convierte a un número con el ADC.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 16,
+          "topic": "Sensores",
+          "type": "theory",
+          "question": "El sensor DHT22 mide...",
+          "options": [
+            "Solo temperatura",
+            "Solo humedad",
+            "Temperatura y humedad",
+            "Presión atmosférica"
+          ],
+          "correct": 2,
+          "explanation": "El DHT22 es un sensor que mide tanto temperatura como humedad relativa del ambiente. Es una señal digital que se lee desde un solo pin de datos.",
+          "timeLimit": 15,
+          "points": 100
+        },
+        {
+          "id": 17,
+          "topic": "POO",
+          "type": "theory",
+          "question": "En Programación Orientada a Objetos, ¿cómo se llama el 'molde' que usás para crear objetos?",
+          "options": [
+            "Función",
+            "Módulo",
+            "Clase",
+            "Variable"
+          ],
+          "correct": 2,
+          "explanation": "La CLASE es el molde o plano. A partir de una clase creás múltiples objetos (instancias) con las mismas propiedades y comportamientos.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 18,
+          "topic": "POO",
+          "type": "code",
+          "language": "python",
+          "question": "¿Qué imprime este código?",
+          "code": "class Sensor:\n    def __init__(self, nombre, unidad):\n        self.nombre = nombre\n        self.unidad = unidad\n    def describir(self):\n        return f\"{self.nombre} (mide en {self.unidad})\"\n\ns = Sensor(\"DHT22\", \"°C\")\nprint(s.describir())",
+          "options": [
+            "Error: falta self",
+            "DHT22 (mide en °C)",
+            "Sensor (mide en unidad)",
+            "None"
+          ],
+          "correct": 1,
+          "explanation": "Se crea una instancia 's' de la clase Sensor con nombre='DHT22' y unidad='°C'. Al llamar s.describir(), usa self.nombre y self.unidad para armar el string.",
+          "timeLimit": 30,
+          "points": 200
+        },
+        {
+          "id": 19,
+          "topic": "POO",
+          "type": "code",
+          "language": "python",
+          "question": "¿Qué concepto de POO se aplica acá?",
+          "code": "class Dispositivo:\n    def encender(self):\n        print(\"Dispositivo encendido\")\n\nclass Ventilador(Dispositivo):\n    def encender(self):\n        print(\"Ventilador girando\")\n\nv = Ventilador()\nv.encender()",
+          "options": [
+            "Encapsulamiento",
+            "Herencia y polimorfismo",
+            "Recursión",
+            "Paradigma funcional"
+          ],
+          "correct": 1,
+          "explanation": "Ventilador HEREDA de Dispositivo (class Ventilador(Dispositivo)). Además hay POLIMORFISMO: Ventilador redefine el método encender() con su propio comportamiento. Se imprime 'Ventilador girando'.",
+          "timeLimit": 30,
+          "points": 200
+        },
+        {
+          "id": 20,
+          "topic": "Proyecto",
+          "type": "theory",
+          "question": "En el proyecto integrador del Sistema de Climatización, ¿qué función cumple el relay (relé)?",
+          "options": [
+            "Mide la temperatura del ambiente",
+            "Actúa como interruptor controlado eléctricamente para encender/apagar el actuador",
+            "Envía datos por WiFi al celular",
+            "Almacena los datos de temperatura en la nube"
+          ],
+          "correct": 1,
+          "explanation": "El relay es un interruptor electromagnético. El ESP32 le envía una señal digital (HIGH/LOW) para encender o apagar un actuador (ventilador, calefactor) según la lógica del programa.",
+          "timeLimit": 25,
+          "points": 150
+        }
+      ]
+    },
+    {
+      "id": "acpi-general",
+      "name": "Tecnicatura ACPI",
+      "emoji": "⚙️",
+      "description": "Automatización, control, instrumentación, PLC, SCADA, electricidad",
+      "questions": [
+        {
+          "id": 101,
+          "topic": "Automatización",
+          "type": "theory",
+          "question": "¿Qué es un sistema SCADA?",
+          "options": [
+            "Un lenguaje de programación para robots",
+            "Un sistema de Supervisión, Control y Adquisición de Datos",
+            "Un tipo de sensor de temperatura",
+            "Una base de datos industrial"
+          ],
+          "correct": 1,
+          "explanation": "SCADA (Supervisory Control And Data Acquisition) es un sistema que permite supervisar y controlar procesos industriales de forma remota, adquiriendo datos en tiempo real de sensores y actuadores.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 102,
+          "topic": "Automatización",
+          "type": "theory",
+          "question": "¿Qué es un PLC?",
+          "options": [
+            "Un Procesador Lógico Computarizado",
+            "Un Controlador Lógico Programable",
+            "Un Protocolo de Línea de Comunicación",
+            "Un Panel de Luz Central"
+          ],
+          "correct": 1,
+          "explanation": "PLC (Programmable Logic Controller - Controlador Lógico Programable) es un dispositivo electrónico industrial diseñado para automatizar procesos. Se programa para controlar maquinaria y procesos industriales.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 103,
+          "topic": "Automatización",
+          "type": "theory",
+          "question": "¿Cuál es la función principal de un actuador en un sistema automatizado?",
+          "options": [
+            "Medir variables del proceso",
+            "Almacenar datos en la nube",
+            "Convertir señales de control en acción física (movimiento, calor, etc.)",
+            "Programar el PLC"
+          ],
+          "correct": 2,
+          "explanation": "Un actuador convierte una señal de control (eléctrica, neumática, hidráulica) en una acción física. Ejemplos: motores, válvulas, pistones, relés. Es el 'brazo ejecutor' del sistema automatizado.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 104,
+          "topic": "Instrumentación",
+          "type": "theory",
+          "question": "¿Qué mide un caudalímetro?",
+          "options": [
+            "La presión de un fluido",
+            "La temperatura de un proceso",
+            "El caudal (flujo) de un fluido por una tubería",
+            "La viscosidad de un líquido"
+          ],
+          "correct": 2,
+          "explanation": "Un caudalímetro mide el caudal, es decir, la cantidad de fluido (líquido o gas) que pasa por un punto de una tubería en un tiempo determinado. Se mide en litros/minuto, m³/hora, etc.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 105,
+          "topic": "Instrumentación",
+          "type": "theory",
+          "question": "¿Qué tipo de señal estándar se usa en la industria para transmitir datos de sensores?",
+          "options": [
+            "0 a 5V DC solamente",
+            "4 a 20 mA (miliamperes)",
+            "Señal WiFi",
+            "Señal de radio FM"
+          ],
+          "correct": 1,
+          "explanation": "La señal estándar industrial es de 4 a 20 mA. Se usa porque es resistente al ruido eléctrico, puede viajar largas distancias por cable, y el valor de 4 mA como mínimo permite detectar cables cortados (0 mA = falla).",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 106,
+          "topic": "Control",
+          "type": "theory",
+          "question": "¿Qué es un lazo de control cerrado (feedback)?",
+          "options": [
+            "Un sistema donde el operador controla todo manualmente",
+            "Un sistema que mide la salida, la compara con el valor deseado y ajusta automáticamente",
+            "Un circuito eléctrico sin resistencias",
+            "Una tubería cerrada sin válvulas"
+          ],
+          "correct": 1,
+          "explanation": "En un lazo cerrado (feedback), el sistema mide la variable de salida con un sensor, la compara con el setpoint (valor deseado) y el controlador ajusta el actuador para corregir el error. Es la base de la automatización.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 107,
+          "topic": "Control",
+          "type": "theory",
+          "question": "En un controlador PID, ¿qué significa la 'P' (acción proporcional)?",
+          "options": [
+            "Actúa proporcionalmente a la velocidad del proceso",
+            "Actúa proporcionalmente al error actual entre setpoint y variable medida",
+            "Programa el PLC proporcionalmente",
+            "Prende y apaga el actuador periódicamente"
+          ],
+          "correct": 1,
+          "explanation": "La acción Proporcional genera una salida de control proporcional al error actual (diferencia entre setpoint y variable medida). A mayor error, mayor corrección. Es la acción más básica del PID.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 108,
+          "topic": "Seguridad",
+          "type": "theory",
+          "question": "¿Qué es un paro de emergencia (E-STOP)?",
+          "options": [
+            "Un botón que apaga solo las luces del tablero",
+            "Un dispositivo que detiene inmediatamente la máquina ante una situación de peligro",
+            "Un programa que reinicia el PLC",
+            "Una alarma sonora"
+          ],
+          "correct": 1,
+          "explanation": "El paro de emergencia (E-STOP) es un dispositivo de seguridad que detiene inmediatamente todo el proceso o máquina. Es obligatorio en toda instalación industrial y debe ser accesible y visible (rojo sobre amarillo).",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 109,
+          "topic": "Electricidad",
+          "type": "theory",
+          "question": "¿Cuál es la diferencia entre corriente alterna (CA) y corriente continua (CC)?",
+          "options": [
+            "La CA es más peligrosa, la CC no",
+            "En la CA la corriente cambia de dirección periódicamente, en la CC fluye siempre en el mismo sentido",
+            "La CA solo se usa en baterías",
+            "No hay diferencia, son iguales"
+          ],
+          "correct": 1,
+          "explanation": "La corriente alterna (CA/AC) cambia de dirección cíclicamente (ej: 50 Hz en Argentina). La corriente continua (CC/DC) fluye siempre en la misma dirección. La red eléctrica usa CA; las baterías y electrónica usan CC.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 110,
+          "topic": "Electricidad",
+          "type": "theory",
+          "question": "¿Qué ley establece que V = I × R?",
+          "options": [
+            "Ley de Newton",
+            "Ley de Ohm",
+            "Ley de Faraday",
+            "Ley de Kirchhoff"
+          ],
+          "correct": 1,
+          "explanation": "La Ley de Ohm establece que el voltaje (V) es igual a la corriente (I) multiplicada por la resistencia (R). Es fundamental en electricidad y electrónica. V se mide en Volts, I en Amperes, R en Ohms.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 111,
+          "topic": "Neumática",
+          "type": "theory",
+          "question": "¿Qué es un cilindro neumático de doble efecto?",
+          "options": [
+            "Un cilindro que funciona con electricidad y agua",
+            "Un cilindro que usa aire comprimido para mover el pistón en ambas direcciones",
+            "Un cilindro que solo empuja pero no retrae",
+            "Un cilindro que almacena aire para uso posterior"
+          ],
+          "correct": 1,
+          "explanation": "Un cilindro neumático de doble efecto usa aire comprimido para mover el pistón tanto en avance como en retroceso. A diferencia del simple efecto (que usa un resorte para retornar), el doble efecto tiene fuerza en ambos sentidos.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 112,
+          "topic": "Redes",
+          "type": "theory",
+          "question": "¿Qué protocolo de comunicación industrial se usa frecuentemente para conectar PLCs y sensores?",
+          "options": [
+            "HTTP",
+            "Modbus",
+            "Bluetooth",
+            "SMTP"
+          ],
+          "correct": 1,
+          "explanation": "Modbus es un protocolo de comunicación serial muy usado en la industria para conectar dispositivos como PLCs, sensores e instrumentos. Puede funcionar sobre cable serial (RS-485) o sobre Ethernet (Modbus TCP).",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 113,
+          "topic": "Automatización",
+          "type": "theory",
+          "question": "¿Qué es un HMI?",
+          "options": [
+            "Un Hardware de Memoria Interna",
+            "Una Interfaz Humano-Máquina (pantalla de operador)",
+            "Un Historial de Mantenimiento Industrial",
+            "Un módulo de comunicación Ethernet"
+          ],
+          "correct": 1,
+          "explanation": "HMI (Human-Machine Interface) es la pantalla o panel que permite al operador interactuar con el sistema automatizado: ver datos del proceso, cambiar setpoints, activar/desactivar equipos, etc.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 114,
+          "topic": "Seguridad",
+          "type": "theory",
+          "question": "¿Qué significan las siglas EPP?",
+          "options": [
+            "Equipo de Programación de PLCs",
+            "Elemento de Protección Personal",
+            "Estación de Procesamiento Principal",
+            "Esquema de Proceso Productivo"
+          ],
+          "correct": 1,
+          "explanation": "EPP (Elementos de Protección Personal) son los equipos que protegen al trabajador de riesgos laborales: casco, guantes, lentes de seguridad, zapatos de seguridad, protección auditiva, etc.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 115,
+          "topic": "Instrumentación",
+          "type": "theory",
+          "question": "¿Qué es la calibración de un instrumento de medición?",
+          "options": [
+            "Pintar el instrumento para que se vea mejor",
+            "Comparar las mediciones del instrumento con un patrón de referencia y ajustarlo",
+            "Conectar el instrumento a Internet",
+            "Instalar el instrumento en el tablero"
+          ],
+          "correct": 1,
+          "explanation": "Calibrar un instrumento es comparar sus lecturas con un patrón de referencia conocido y, si hay desviaciones, ajustarlo para que mida correctamente. Es fundamental para mantener la calidad y seguridad del proceso.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 116,
+          "topic": "Control",
+          "type": "theory",
+          "question": "¿Qué es el setpoint (punto de ajuste) en un sistema de control?",
+          "options": [
+            "El valor máximo que puede alcanzar el sensor",
+            "El valor deseado al que se quiere mantener la variable del proceso",
+            "La marca del controlador",
+            "El cable que conecta el sensor al PLC"
+          ],
+          "correct": 1,
+          "explanation": "El setpoint (SP) es el valor deseado o de referencia. El controlador compara el setpoint con la variable de proceso (PV) medida por el sensor y actúa para que la PV se mantenga lo más cerca posible del SP.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 117,
+          "topic": "Automatización",
+          "type": "theory",
+          "question": "¿Cuáles son las 3 partes fundamentales de un sistema de control automático?",
+          "options": [
+            "Monitor, teclado y mouse",
+            "Sensor, controlador y actuador",
+            "Cable, enchufe y transformador",
+            "PLC, HMI y SCADA"
+          ],
+          "correct": 1,
+          "explanation": "Todo sistema de control tiene: SENSOR (mide la variable), CONTROLADOR (procesa y decide) y ACTUADOR (ejecuta la acción). Ejemplo: termómetro (sensor), termostato (controlador), calefactor (actuador).",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 118,
+          "topic": "Electricidad",
+          "type": "theory",
+          "question": "¿Qué dispositivo protege un circuito eléctrico contra sobrecargas?",
+          "options": [
+            "Un capacitor",
+            "Un termistor",
+            "Un interruptor termomagnético (llave térmica)",
+            "Un transformador"
+          ],
+          "correct": 2,
+          "explanation": "El interruptor termomagnético (llave térmica) protege contra sobrecargas y cortocircuitos, desconectando automáticamente el circuito cuando la corriente supera el valor nominal. Es esencial en toda instalación eléctrica.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 119,
+          "topic": "Automatización",
+          "type": "theory",
+          "question": "¿Qué es la Industria 4.0?",
+          "options": [
+            "La cuarta fábrica más grande del mundo",
+            "La cuarta revolución industrial basada en IoT, big data, IA y automatización avanzada",
+            "Un modelo de PLC específico",
+            "Una norma de seguridad eléctrica"
+          ],
+          "correct": 1,
+          "explanation": "La Industria 4.0 o cuarta revolución industrial integra tecnologías como IoT (Internet de las Cosas), inteligencia artificial, big data, robótica y cloud computing para crear fábricas inteligentes y conectadas.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 120,
+          "topic": "Instrumentación",
+          "type": "theory",
+          "question": "¿Qué es una termocupla (termopar)?",
+          "options": [
+            "Un motor eléctrico para calentar agua",
+            "Un sensor de temperatura que genera un voltaje proporcional a la temperatura",
+            "Un interruptor que enciende a cierta temperatura",
+            "Un cable especial para redes industriales"
+          ],
+          "correct": 1,
+          "explanation": "Una termocupla es un sensor de temperatura formado por dos metales diferentes unidos. Genera un pequeño voltaje (mV) proporcional a la diferencia de temperatura. Es muy usada en la industria por su amplio rango y robustez.",
+          "timeLimit": 25,
+          "points": 150
+        }
+      ]
+    },
+    {
+      "id": "mmo",
+      "name": "Tecnicatura MMO",
+      "emoji": "🔧",
+      "description": "Mantenimiento, mecánica, soldadura, hidráulica, neumática, materiales",
+      "questions": [
+        {
+          "id": 201,
+          "topic": "Mantenimiento",
+          "type": "theory",
+          "question": "¿Qué tipo de mantenimiento se realiza ANTES de que ocurra una falla?",
+          "options": [
+            "Mantenimiento correctivo",
+            "Mantenimiento preventivo",
+            "Mantenimiento de emergencia",
+            "Mantenimiento estético"
+          ],
+          "correct": 1,
+          "explanation": "El mantenimiento PREVENTIVO se planifica y ejecuta antes de que la máquina falle, basándose en intervalos de tiempo o uso. Incluye lubricación, cambio de filtros, inspecciones, etc. Reduce paradas no planificadas.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 202,
+          "topic": "Mantenimiento",
+          "type": "theory",
+          "question": "¿Qué es el mantenimiento predictivo?",
+          "options": [
+            "Reparar la máquina cuando se rompe",
+            "Monitorear el estado real de la máquina para predecir cuándo va a fallar",
+            "Cambiar piezas cada 6 meses sin importar su estado",
+            "Pintar y limpiar las máquinas periódicamente"
+          ],
+          "correct": 1,
+          "explanation": "El mantenimiento predictivo usa técnicas como análisis de vibraciones, termografía y análisis de aceite para monitorear el estado real de la máquina y predecir cuándo va a necesitar intervención, optimizando costos y tiempos.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 203,
+          "topic": "Mecánica",
+          "type": "theory",
+          "question": "¿Para qué sirve un rodamiento (rulemán)?",
+          "options": [
+            "Para sellar tuberías",
+            "Para reducir la fricción entre piezas que giran o se deslizan",
+            "Para medir la velocidad de un eje",
+            "Para conectar cables eléctricos"
+          ],
+          "correct": 1,
+          "explanation": "Los rodamientos (rulemanes) reducen la fricción entre un eje giratorio y su soporte. Pueden ser de bolas, de rodillos o de agujas. Son esenciales en motores, poleas, ruedas y toda pieza giratoria.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 204,
+          "topic": "Mecánica",
+          "type": "theory",
+          "question": "¿Qué herramienta se usa para medir con precisión de centésimas de milímetro?",
+          "options": [
+            "Regla metálica",
+            "Cinta métrica",
+            "Calibre o pie de rey (vernier)",
+            "Escuadra"
+          ],
+          "correct": 2,
+          "explanation": "El calibre (también llamado pie de rey o vernier) permite medir diámetros exteriores, interiores y profundidades con precisión de hasta 0.02 mm. Es una herramienta fundamental en cualquier taller mecánico.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 205,
+          "topic": "Materiales",
+          "type": "theory",
+          "question": "¿Qué es el acero inoxidable?",
+          "options": [
+            "Acero pintado con pintura antióxido",
+            "Una aleación de hierro con cromo (mínimo ~10.5%) que resiste la corrosión",
+            "Acero que nunca se calienta",
+            "Un plástico con apariencia metálica"
+          ],
+          "correct": 1,
+          "explanation": "El acero inoxidable es una aleación de hierro con al menos ~10.5% de cromo. El cromo forma una capa pasiva de óxido de cromo que protege de la corrosión. Se usa en cocinas, industria alimenticia, medicina, etc.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 206,
+          "topic": "Soldadura",
+          "type": "theory",
+          "question": "¿Qué tipo de soldadura usa un electrodo revestido que se consume durante el proceso?",
+          "options": [
+            "Soldadura TIG",
+            "Soldadura por arco con electrodo revestido (SMAW / eléctrica)",
+            "Soldadura por puntos",
+            "Soldadura autógena"
+          ],
+          "correct": 1,
+          "explanation": "La soldadura SMAW (Shielded Metal Arc Welding), conocida como 'soldadura eléctrica', usa un electrodo revestido que se va consumiendo. El revestimiento genera un gas protector y escoria. Es la más común en mantenimiento.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 207,
+          "topic": "Hidráulica",
+          "type": "theory",
+          "question": "¿Cuál es el principio fundamental de la hidráulica?",
+          "options": [
+            "El aire se comprime fácilmente",
+            "La presión aplicada a un fluido confinado se transmite en todas las direcciones (Principio de Pascal)",
+            "El agua siempre fluye hacia arriba",
+            "Los líquidos no pueden transmitir fuerza"
+          ],
+          "correct": 1,
+          "explanation": "El Principio de Pascal establece que la presión aplicada a un fluido confinado se transmite íntegramente en todas las direcciones. Esto permite multiplicar fuerzas en prensas hidráulicas, elevadores, retroexcavadoras, etc.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 208,
+          "topic": "Seguridad",
+          "type": "theory",
+          "question": "Antes de trabajar en una máquina, ¿qué procedimiento de seguridad es obligatorio?",
+          "options": [
+            "Solamente avisar al supervisor",
+            "Bloqueo y etiquetado (LOTO - Lock Out Tag Out)",
+            "Mirar si alguien más está trabajando",
+            "Usar guantes solamente"
+          ],
+          "correct": 1,
+          "explanation": "El procedimiento LOTO (Lock Out Tag Out) es obligatorio. Consiste en desconectar la fuente de energía, bloquearla con candado y colocar una etiqueta identificatoria para que nadie la reenergice mientras se trabaja.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 209,
+          "topic": "Mecánica",
+          "type": "theory",
+          "question": "¿Qué tipo de transmisión mecánica usa una correa y poleas?",
+          "options": [
+            "Transmisión por engranajes",
+            "Transmisión por cadena",
+            "Transmisión por correa (también llamada por faja)",
+            "Transmisión por piñón y cremallera"
+          ],
+          "correct": 2,
+          "explanation": "La transmisión por correa usa una faja flexible (plana, en V, o dentada) que conecta dos poleas para transmitir movimiento. Permite cierto deslizamiento y absorbe vibraciones. Se usa en compresores, ventiladores, etc.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 210,
+          "topic": "Electricidad",
+          "type": "theory",
+          "question": "¿Qué instrumento se usa para medir voltaje, corriente y resistencia?",
+          "options": [
+            "Osciloscopio",
+            "Multímetro (tester)",
+            "Pirómetro",
+            "Manómetro"
+          ],
+          "correct": 1,
+          "explanation": "El multímetro (tester) es el instrumento más versátil del electricista. Mide voltaje (V), corriente (A). resistencia (Ω) y, en modelos digitales, también continuidad, capacitancia, frecuencia, etc.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 211,
+          "topic": "Mantenimiento",
+          "type": "theory",
+          "question": "¿Qué es una orden de trabajo (OT) en mantenimiento?",
+          "options": [
+            "Un email del jefe pidiendo que trabajes más rápido",
+            "Un documento que detalla el trabajo a realizar, materiales, tiempos y responsables",
+            "Un recibo de sueldo",
+            "Una cotización de repuestos"
+          ],
+          "correct": 1,
+          "explanation": "La Orden de Trabajo (OT) es el documento que autoriza y describe una tarea de mantenimiento: qué hacer, dónde, quién lo hace, materiales necesarios, prioridad y tiempos estimados. Es clave para la gestión del mantenimiento.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 212,
+          "topic": "Materiales",
+          "type": "theory",
+          "question": "¿Qué es el torque (par) de apriete?",
+          "options": [
+            "La temperatura a la que se funde un tornillo",
+            "La fuerza de giro aplicada a un tornillo o tuerca para ajustarlo correctamente",
+            "El diámetro del tornillo",
+            "La cantidad de tornillos necesarios"
+          ],
+          "correct": 1,
+          "explanation": "El torque (par de apriete) es la fuerza de giro aplicada para apretar un tornillo o tuerca. Se mide con torquímetro y se expresa en Nm (Newton-metro). Aplicar el torque correcto evita roturas y aflojamientos.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 213,
+          "topic": "Mecánica",
+          "type": "theory",
+          "question": "¿Para qué se usa la lubricación en las máquinas?",
+          "options": [
+            "Solo para que las piezas brillen",
+            "Para reducir fricción, desgaste y temperatura entre piezas en movimiento",
+            "Para pintar las piezas de color negro",
+            "Para aumentar la velocidad del motor"
+          ],
+          "correct": 1,
+          "explanation": "La lubricación reduce la fricción entre superficies en movimiento, disminuye el desgaste, disipa calor, protege contra la corrosión y ayuda a sellar. Es una de las tareas más importantes del mantenimiento preventivo.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 214,
+          "topic": "Construcción",
+          "type": "theory",
+          "question": "¿Qué es el hormigón armado?",
+          "options": [
+            "Hormigón mezclado con pintura especial",
+            "Hormigón reforzado con barras de acero (armadura) en su interior",
+            "Hormigón que se endurece más rápido",
+            "Hormigón de color gris oscuro"
+          ],
+          "correct": 1,
+          "explanation": "El hormigón armado combina hormigón (que resiste bien la compresión) con barras de acero (que resisten bien la tracción). Juntos forman un material versátil usado en columnas, vigas, losas y cimientos.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 215,
+          "topic": "Seguridad",
+          "type": "theory",
+          "question": "¿Qué indica la señalización de color AMARILLO en una planta industrial?",
+          "options": [
+            "Zona segura",
+            "Precaución, riesgo o advertencia",
+            "Obligación de usar EPP",
+            "Prohibido el paso"
+          ],
+          "correct": 1,
+          "explanation": "El color AMARILLO indica precaución, advertencia o riesgo. El ROJO indica prohibición o peligro, el AZUL indica obligación (ej: usar casco), y el VERDE indica condición segura (ej: salida de emergencia).",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 216,
+          "topic": "Motores",
+          "type": "theory",
+          "question": "¿Qué tipo de motor eléctrico es el más utilizado en la industria?",
+          "options": [
+            "Motor de corriente continua",
+            "Motor asíncrono trifásico (de inducción)",
+            "Motor paso a paso",
+            "Motor universal"
+          ],
+          "correct": 1,
+          "explanation": "El motor asíncrono trifásico (de inducción) es el más usado en la industria por su robustez, bajo costo, poco mantenimiento y alta eficiencia. Se usa en bombas, compresores, ventiladores, cintas transportadoras, etc.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 217,
+          "topic": "Neumática",
+          "type": "theory",
+          "question": "¿Qué equipo genera el aire comprimido en un sistema neumático?",
+          "options": [
+            "Una bomba hidráulica",
+            "Un compresor",
+            "Un generador eléctrico",
+            "Un ventilador industrial"
+          ],
+          "correct": 1,
+          "explanation": "El compresor aspira aire atmosférico y lo comprime a alta presión (6-8 bar típicamente). El aire comprimido se almacena en un tanque (pulmón) y se distribuye por tuberías a los actuadores neumáticos de la planta.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 218,
+          "topic": "Mantenimiento",
+          "type": "theory",
+          "question": "¿Qué es el análisis de vibraciones en mantenimiento predictivo?",
+          "options": [
+            "Verificar si el piso de la fábrica vibra",
+            "Medir y analizar las vibraciones de una máquina para detectar fallas incipientes",
+            "Hacer vibrar la máquina para probarla",
+            "Un tipo de soldadura especial"
+          ],
+          "correct": 1,
+          "explanation": "El análisis de vibraciones mide las vibraciones de máquinas rotativas (motores, bombas, ventiladores) para detectar problemas como desbalanceo, desalineación, rodamientos dañados o engranajes gastados ANTES de que fallen.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 219,
+          "topic": "Mecánica",
+          "type": "theory",
+          "question": "¿Qué tipo de rosca se usa comúnmente en plomería y tuberías?",
+          "options": [
+            "Rosca métrica fina",
+            "Rosca Whitworth BSP (cónica para sellar)",
+            "Rosca cuadrada",
+            "Rosca de tornillo sin fin"
+          ],
+          "correct": 1,
+          "explanation": "La rosca BSP (British Standard Pipe) es la más usada en tuberías y conexiones de plomería. Su versión cónica (BSPT) permite sellar sin cinta teflón en algunos casos, ya que la conicidad genera un ajuste hermético.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 220,
+          "topic": "Construcción",
+          "type": "theory",
+          "question": "¿Qué es un nivel de burbuja y para qué se usa?",
+          "options": [
+            "Para medir la temperatura del agua",
+            "Para verificar si una superficie está horizontal o vertical (a plomo)",
+            "Para medir la presión del aire",
+            "Para cortar materiales rectos"
+          ],
+          "correct": 1,
+          "explanation": "El nivel de burbuja es una herramienta que usa un tubo con líquido y una burbuja de aire. Cuando la burbuja está centrada entre las marcas, la superficie está perfectamente horizontal (o vertical, según el uso).",
+          "timeLimit": 20,
+          "points": 100
+        }
+      ]
+    },
+    {
+      "id": "escuela",
+      "name": "Cultura General / Escuela",
+      "emoji": "🎓",
+      "description": "Ciencia, tecnología, educación técnica, cultura escolar",
+      "questions": [
+        {
+          "id": 301,
+          "topic": "Cultura General",
+          "type": "theory",
+          "question": "¿Cuál es el día del estudiante en Argentina?",
+          "options": [
+            "25 de mayo",
+            "21 de septiembre",
+            "15 de noviembre",
+            "1 de marzo"
+          ],
+          "correct": 1,
+          "explanation": "El 21 de septiembre se celebra el Día del Estudiante en Argentina, coincidiendo con el inicio de la primavera y en homenaje al traslado de los restos de Domingo Faustino Sarmiento.",
+          "timeLimit": 15,
+          "points": 100
+        },
+        {
+          "id": 302,
+          "topic": "Educación Técnica",
+          "type": "theory",
+          "question": "¿Cuántos años dura una tecnicatura de nivel superior en Argentina?",
+          "options": [
+            "1 año",
+            "2 años",
+            "3 años",
+            "5 años"
+          ],
+          "correct": 2,
+          "explanation": "Las tecnicaturas de nivel superior generalmente duran entre 2 y 3 años, y otorgan un título de Técnico Superior. Combinan formación teórica con práctica profesionalizante.",
+          "timeLimit": 15,
+          "points": 100
+        },
+        {
+          "id": 303,
+          "topic": "Cultura General",
+          "type": "theory",
+          "question": "¿Qué día se celebra el Día de la Educación Técnica en Argentina?",
+          "options": [
+            "15 de noviembre",
+            "11 de septiembre",
+            "17 de agosto",
+            "25 de mayo"
+          ],
+          "correct": 0,
+          "explanation": "El 15 de noviembre se celebra el Día de la Educación Técnica en Argentina, en conmemoración de la fundación de las primeras escuelas de artes y oficios, a través de la Ley N° 1420.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 304,
+          "topic": "Tecnología",
+          "type": "theory",
+          "question": "¿Qué significa IoT?",
+          "options": [
+            "Internet of Things (Internet de las Cosas)",
+            "Internal Operating Technology",
+            "Input-Output Terminal",
+            "Integrated Online Tool"
+          ],
+          "correct": 0,
+          "explanation": "IoT (Internet of Things / Internet de las Cosas) se refiere a objetos físicos conectados a Internet que pueden enviar y recibir datos: sensores, electrodomésticos inteligentes, wearables, vehículos, etc.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 305,
+          "topic": "Ciencia",
+          "type": "theory",
+          "question": "¿Cuál es la unidad de medida de la energía eléctrica que consumimos en nuestras casas?",
+          "options": [
+            "Watts (W)",
+            "Kilowatt-hora (kWh)",
+            "Amperes (A)",
+            "Volts (V)"
+          ],
+          "correct": 1,
+          "explanation": "La energía eléctrica se mide en kWh (kilowatt-hora). Es la energía consumida por un dispositivo de 1 kW durante 1 hora. Es lo que factura la empresa de electricidad. El Watt es potencia, no energía.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 306,
+          "topic": "Tecnología",
+          "type": "theory",
+          "question": "¿Qué es la inteligencia artificial (IA)?",
+          "options": [
+            "Un robot con forma humana",
+            "La capacidad de una máquina para simular procesos de inteligencia humana como aprender y razonar",
+            "Un programa de computadora muy grande",
+            "Una red social para científicos"
+          ],
+          "correct": 1,
+          "explanation": "La IA es la simulación de procesos de inteligencia humana por máquinas: aprendizaje (machine learning), razonamiento, percepción y procesamiento del lenguaje natural. No necesita un cuerpo físico de robot.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 307,
+          "topic": "Ciencia",
+          "type": "theory",
+          "question": "¿Qué es la energía renovable?",
+          "options": [
+            "Energía que se obtiene solo del petróleo",
+            "Energía que proviene de fuentes naturales inagotables o que se regeneran",
+            "Energía que se descubrió recientemente",
+            "Energía nuclear"
+          ],
+          "correct": 1,
+          "explanation": "Las energías renovables provienen de fuentes naturales que se regeneran: solar (sol), eólica (viento), hidráulica (agua), geotérmica (calor de la tierra) y biomasa. Son clave para combatir el cambio climático.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 308,
+          "topic": "Cultura General",
+          "type": "theory",
+          "question": "¿Qué es un proyecto integrador en la educación técnica?",
+          "options": [
+            "Un examen escrito de todas las materias",
+            "Un trabajo que integra conocimientos de varias materias para resolver un problema real",
+            "Una clase magistral del director",
+            "Un viaje de estudios a una fábrica"
+          ],
+          "correct": 1,
+          "explanation": "El proyecto integrador combina conocimientos de múltiples materias para diseñar y construir una solución a un problema real. Desarrolla competencias técnicas, trabajo en equipo, investigación y presentación.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 309,
+          "topic": "Tecnología",
+          "type": "theory",
+          "question": "¿Qué es un código QR?",
+          "options": [
+            "Un tipo de virus informático",
+            "Un código de barras bidimensional que almacena información legible por cámara",
+            "Un lenguaje de programación",
+            "Un formato de imagen"
+          ],
+          "correct": 1,
+          "explanation": "QR (Quick Response) es un código de barras 2D que almacena URLs, texto, contactos, etc. Se escanea con la cámara del celular. Fue inventado en 1994 por Denso Wave (Japón) y se usa masivamente.",
+          "timeLimit": 15,
+          "points": 100
+        },
+        {
+          "id": 310,
+          "topic": "Ciencia",
+          "type": "theory",
+          "question": "¿Cuántos bytes tiene 1 Megabyte (MB)?",
+          "options": [
+            "1.000 bytes",
+            "100.000 bytes",
+            "1.000.000 bytes (un millón)",
+            "1.000.000.000 bytes (mil millones)"
+          ],
+          "correct": 2,
+          "explanation": "1 MB = 1.000.000 bytes (en la convención decimal). En informática, 1 MiB (Mebibyte) = 1.048.576 bytes (2^20). La jerarquía es: Byte → KB → MB → GB → TB.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 311,
+          "topic": "Educación Técnica",
+          "type": "theory",
+          "question": "¿Qué es una práctica profesionalizante?",
+          "options": [
+            "Un examen teórico muy difícil",
+            "Una actividad formativa que acerca al estudiante al ejercicio real de su profesión",
+            "Un juego recreativo en la escuela",
+            "Una reunión de padres"
+          ],
+          "correct": 1,
+          "explanation": "Las prácticas profesionalizantes son experiencias formativas en las que el estudiante aplica sus conocimientos en situaciones reales o simuladas del mundo laboral. Pueden realizarse en la escuela, empresas o instituciones.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 312,
+          "topic": "Tecnología",
+          "type": "theory",
+          "question": "¿Qué es la computación en la nube (cloud computing)?",
+          "options": [
+            "Usar computadoras que flotan en el aire",
+            "Acceder a servicios de procesamiento, almacenamiento y software a través de Internet",
+            "Programar solo cuando llueve",
+            "Un tipo especial de WiFi"
+          ],
+          "correct": 1,
+          "explanation": "Cloud computing permite usar servidores remotos a través de Internet para almacenar datos, ejecutar programas y procesar información sin necesidad de tener todo en tu propia computadora. Ejemplos: Google Drive, AWS, Azure.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 313,
+          "topic": "Ciencia",
+          "type": "theory",
+          "question": "¿Qué gas representa aproximadamente el 78% de la atmósfera terrestre?",
+          "options": [
+            "Oxígeno",
+            "Dióxido de carbono",
+            "Nitrógeno",
+            "Hidrógeno"
+          ],
+          "correct": 2,
+          "explanation": "La atmósfera terrestre se compone aproximadamente de: 78% Nitrógeno (N₂), 21% Oxígeno (O₂), y el 1% restante incluye argón, CO₂ y otros gases. El nitrógeno se usa industrialmente en soldadura, neumática, etc.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 314,
+          "topic": "Cultura General",
+          "type": "theory",
+          "question": "¿Qué significa la sigla INET?",
+          "options": [
+            "Instituto Nacional de Empresas Técnicas",
+            "Instituto Nacional de Educación Tecnológica",
+            "Investigación Nacional en Electrónica y Tecnología",
+            "Instituto Nacional de Energía y Transporte"
+          ],
+          "correct": 1,
+          "explanation": "INET (Instituto Nacional de Educación Tecnológica) es el organismo del Ministerio de Educación de Argentina que regula, fortalece y promueve la educación técnico-profesional en todo el país.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 315,
+          "topic": "Tecnología",
+          "type": "theory",
+          "question": "¿Qué es una impresora 3D?",
+          "options": [
+            "Una impresora que imprime fotos en alta resolución",
+            "Una máquina que crea objetos tridimensionales capa por capa a partir de un modelo digital",
+            "Una impresora que usa tres colores de tinta",
+            "Un escáner que digitaliza objetos"
+          ],
+          "correct": 1,
+          "explanation": "La impresión 3D (fabricación aditiva) construye objetos tridimensionales depositando material capa por capa según un diseño digital (CAD). Se usan plásticos (PLA, ABS), resinas, metales e incluso concreto.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 316,
+          "topic": "Ciencia",
+          "type": "theory",
+          "question": "¿Cuáles son los 3 estados de la materia más comunes?",
+          "options": [
+            "Caliente, tibio y frío",
+            "Sólido, líquido y gaseoso",
+            "Plástico, metal y madera",
+            "Pesado, ligero y medio"
+          ],
+          "correct": 1,
+          "explanation": "Los 3 estados clásicos de la materia son: sólido (forma y volumen definidos), líquido (volumen definido, forma variable) y gaseoso (ni forma ni volumen definidos). También existe el plasma (4° estado).",
+          "timeLimit": 15,
+          "points": 100
+        },
+        {
+          "id": 317,
+          "topic": "Educación Técnica",
+          "type": "theory",
+          "question": "¿Qué es un plano técnico?",
+          "options": [
+            "Una foto de la pieza terminada",
+            "Un dibujo con medidas exactas, escalas y normas que permite fabricar o construir algo",
+            "Un resumen del proyecto en texto",
+            "Una lista de materiales"
+          ],
+          "correct": 1,
+          "explanation": "Un plano técnico es una representación gráfica normalizada de un objeto, con medidas (cotas), escalas, vistas, secciones y tolerancias que permiten fabricarlo o construirlo correctamente. Se dibuja según normas IRAM/ISO.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 318,
+          "topic": "Tecnología",
+          "type": "theory",
+          "question": "¿Qué es Arduino?",
+          "options": [
+            "Un lenguaje de programación exclusivo",
+            "Una plataforma de hardware y software libre para crear proyectos electrónicos",
+            "Una marca de computadoras",
+            "Un sistema operativo para celulares"
+          ],
+          "correct": 1,
+          "explanation": "Arduino es una plataforma de código abierto que incluye placas con microcontrolador y un entorno de desarrollo (IDE). Permite crear proyectos electrónicos interactivos de forma accesible. Ideal para aprender electrónica.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 319,
+          "topic": "Ciencia",
+          "type": "theory",
+          "question": "¿Qué mide un manómetro?",
+          "options": [
+            "Temperatura",
+            "Presión de un fluido",
+            "Velocidad del viento",
+            "Nivel de un líquido"
+          ],
+          "correct": 1,
+          "explanation": "El manómetro mide la presión de fluidos (gases o líquidos). Se usa en compresores, calderas, redes de gas, neumática, etc. La presión se mide en bar, psi, kg/cm², Pascal, entre otras unidades.",
+          "timeLimit": 15,
+          "points": 100
+        },
+        {
+          "id": 320,
+          "topic": "Cultura General",
+          "type": "theory",
+          "question": "¿Qué habilidad blanda (soft skill) es más valorada en el trabajo técnico según las empresas?",
+          "options": [
+            "Saber muchos idiomas",
+            "Trabajo en equipo y comunicación efectiva",
+            "Memorizarlo todo",
+            "Llegar siempre primero"
+          ],
+          "correct": 1,
+          "explanation": "El trabajo en equipo y la comunicación efectiva son las soft skills más valoradas. En un entorno técnico, se trabaja siempre con otros (operadores, ingenieros, supervisores) y comunicar bien evita errores y accidentes.",
+          "timeLimit": 20,
+          "points": 100
+        }
+      ]
+    },
+    {
+      "id": "prog-general-3ro",
+      "name": "Programación 3° - General",
+      "emoji": "🚀",
+      "description": "Diseño, Funcional, Imperativo y POO - 10 preguntas",
+      "questions": [
+        {
+          "id": 1,
+          "topic": "Algoritmos",
+          "type": "theory",
+          "question": "¿Qué es un algoritmo en programación?",
+          "options": [
+            "Un hardware específico para resolver cuentas",
+            "Una serie de pasos finitos y ordenados para resolver un problema",
+            "El código fuente de un programa compilado",
+            "La memoria RAM utilizada por un programa"
+          ],
+          "correct": 1,
+          "explanation": "Un algoritmo es la receta o secuencia de pasos lógicos que permiten llegar a la solución de un problema, independientemente del lenguaje de programación.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 2,
+          "topic": "Paradigma Imperativo",
+          "type": "theory",
+          "question": "¿Qué rol cumplen las variables e iteraciones en la programación imperativa?",
+          "options": [
+            "Modificar el estado del programa paso a paso indicando el cómo llegar al resultado",
+            "Solo se utilizan para comunicarse con la base de datos",
+            "Definir únicamente reglas lógicas sin modificar ningún estado",
+            "Generar objetos físicos a partir de clases"
+          ],
+          "correct": 0,
+          "explanation": "En la programación imperativa, damos órdenes detalladas (comandos) y modificamos el estado del programa a través de variables e iteraciones.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 3,
+          "topic": "Programación Estructurada",
+          "type": "theory",
+          "question": "La modularización de un programa permite:",
+          "options": [
+            "Escribir todo el código en un único bloque continuo",
+            "Evitar el uso de lenguajes compilados",
+            "Dividir un problema en subproblemas (funciones o procedimientos) más fáciles de resolver y mantener",
+            "Hacer que el programa corra sin usar memoria"
+          ],
+          "correct": 2,
+          "explanation": "Modularizar (o dividir y vencerás) mejora la legibilidad, reduce la repetición y facilita el mantenimiento del código.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 4,
+          "topic": "Estructuras de Control",
+          "type": "code",
+          "language": "python",
+          "question": "¿Cuántas veces se ejecutará el código dentro de esta estructura iterativa?",
+          "code": "contador = 0\nwhile contador < 3:\n    print(\"Hola\")\n    contador += 1",
+          "options": [
+            "1 vez",
+            "2 veces",
+            "3 veces",
+            "4 veces"
+          ],
+          "correct": 2,
+          "explanation": "El contador empieza en 0. Imprime y suma (1), imprime y suma (2), imprime y suma (3). Luego la condición (3 < 3) es falsa, por lo que se ejecuta exactamente 3 veces.",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 5,
+          "topic": "Funciones",
+          "type": "theory",
+          "question": "Al definir una función, los 'parámetros' sirven para:",
+          "options": [
+            "Recibir datos de entrada que la función necesita para realizar su tarea",
+            "Retornar siempre un valor True o False",
+            "Manejar los errores de compilación",
+            "Borrar variables de la memoria"
+          ],
+          "correct": 0,
+          "explanation": "Los parámetros son variables locales de la función que reciben los valores (argumentos) que se le pasan al invocarla.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 6,
+          "topic": "Paradigma Funcional",
+          "type": "theory",
+          "question": "En una función recursiva pura, la 'condición de terminación' (o caso base) es fundamental porque:",
+          "options": [
+            "Acelera el procesador al doble",
+            "Evita que la función se llame a sí misma infinitamente",
+            "Permite usar bases de datos SQL",
+            "Convierte la función a paradigma orientado a objetos"
+          ],
+          "correct": 1,
+          "explanation": "Si no hay caso base o condición de corte, la recursión no se detiene nunca y termina agotando la memoria (Stack Overflow).",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 7,
+          "topic": "Tipos de Datos",
+          "type": "theory",
+          "question": "¿Qué característica principal tiene un 'Arreglo' (Lista/Array)?",
+          "options": [
+            "Almacena un solo valor constante",
+            "Almacena una colección secuencial de elementos accesibles mediante un índice",
+            "Es exclusivo del paradigma orientado a objetos",
+            "Acelera el tiempo de compilación del código"
+          ],
+          "correct": 1,
+          "explanation": "Un arreglo o lista guarda múltiples valores en orden, y podemos acceder a ellos usando su posición (índice), que generalmente arranca en 0.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 8,
+          "topic": "POO",
+          "type": "theory",
+          "question": "En POO, ¿cuál es la relación correcta entre Clase y Objeto?",
+          "options": [
+            "La Clase es la instancia en memoria, el Objeto es el archivo de texto",
+            "Son sinónimos exactos en todos los lenguajes",
+            "La Clase es el molde genérico, y el Objeto es una instancia concreta creada a partir de esa clase",
+            "El Objeto crea a las Clases mediante herencia"
+          ],
+          "correct": 2,
+          "explanation": "Las Clases definen qué atributos y métodos tendrán las cosas, pero los Objetos son esas cosas ya creadas y viviendo en la memoria (los planos vs. la casa).",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 9,
+          "topic": "POO: Mensajes y Métodos",
+          "type": "theory",
+          "question": "¿Qué es un 'método' dentro del paradigma orientado a objetos?",
+          "options": [
+            "Un bloque de código estructurado fuera de cualquier clase",
+            "El proceso de instalación de un software",
+            "Un comportamiento o función que pertenece a un objeto y es invocado mediante un mensaje",
+            "Un tipo especial de variable para guardar texto"
+          ],
+          "correct": 2,
+          "explanation": "Los métodos son las rutinas que definen qué sabe hacer un objeto. Otros objetos se comunican con él enviándole 'mensajes' para ejecutar esos métodos.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 10,
+          "topic": "POO: Polimorfismo",
+          "type": "theory",
+          "question": "El polimorfismo permite que:",
+          "options": [
+            "Dos objetos de clases distintas respondan de manera diferente al mismo mensaje",
+            "Un programa se ejecute en Windows y en Linux sin esfuerzo",
+            "Se borre código duplicado de forma automática",
+            "Las iteraciones corran en paralelo"
+          ],
+          "correct": 0,
+          "explanation": "Polimorfismo significa 'múltiples formas'. Permite usar objetos de distintos tipos con la misma interfaz (mismo mensaje), pero que cada uno actúe como corresponda.",
+          "timeLimit": 25,
+          "points": 150
+        }
+      ]
+    },
+    {
+      "id": "prog-estructurada-3ro",
+      "name": "Programación 3° - Algoritmos",
+      "emoji": "🧠",
+      "description": "Diseño de algoritmos, paradigma imperativo, secuencias y selección - 5 preguntas",
+      "questions": [
+        {
+          "id": 1,
+          "topic": "Algoritmos",
+          "type": "theory",
+          "question": "¿Qué son la 'precondición' y 'postcondición' en la especificación de un programa?",
+          "options": [
+            "Son librerías que se deben pre-instalar antes de codificar",
+            "La precondición es el estado inicial válido requerido, y la postcondición es qué garantiza el algoritmo al finalizar",
+            "Refieren únicamente a la compatibilidad del tipo de computadora",
+            "Son tipos de bucles infinitos no deseados"
+          ],
+          "correct": 1,
+          "explanation": "Se usan como 'contrato': Si cumplís la precondición al llamar a la función (los datos están bien), te aseguro que el resultado cumplirá la postcondición (respuesta correcta).",
+          "timeLimit": 25,
+          "points": 150
+        },
+        {
+          "id": 2,
+          "topic": "Estructuras Básicas",
+          "type": "theory",
+          "question": "¿Cuáles son las tres estructuras de control fundamentales en la programación estructurada?",
+          "options": [
+            "Secuencia, Selección e Iteración",
+            "Clases, Objetos y Métodos",
+            "Sumar, Restar y Dividir",
+            "Filtros, Mapas y Reducciones"
+          ],
+          "correct": 0,
+          "explanation": "El paradigma estructurado indica que cualquier algoritmo puede programarse combinando Secuencias (un paso tras otro), Selecciones (if/else) e Iteraciones (while/for).",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 3,
+          "topic": "Variables y Estado",
+          "type": "theory",
+          "question": "¿Qué es el 'estado' en el paradigma imperativo?",
+          "options": [
+            "La versión del sistema operativo actual",
+            "Si el programa está encendido o apagado",
+            "El conjunto de todos los valores que tienen las variables del programa en un momento dado",
+            "El país desde el que se accede al programa"
+          ],
+          "correct": 2,
+          "explanation": "El paradigma imperativo actúa 'cambiando el estado'. Cada paso modifica el valor de una variable, mutando el estado general hasta llegar al resultado final.",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 4,
+          "topic": "Diseño de Algoritmos",
+          "type": "theory",
+          "question": "Una 'iteración' es útil en el diseño de un algoritmo cuando...",
+          "options": [
+            "Necesitamos evitar el uso total de variables",
+            "Queremos repetir un bloque de código automáticamente mientras se cumpla una condición",
+            "Solo tenemos que tomar una decisión de Sí o No inmediata",
+            "Precisamos crear un nuevo objeto derivado de otra clase"
+          ],
+          "correct": 1,
+          "explanation": "Las iteraciones o bucles evitan que tengamos que repetir el código manualmente. La computadora lo ejecuta reiteradas veces según nuestra lógica (ej. procesar a 30 alumnos).",
+          "timeLimit": 20,
+          "points": 100
+        },
+        {
+          "id": 5,
+          "topic": "Diseño de Algoritmos",
+          "type": "code",
+          "language": "python",
+          "question": "En este diagrama o fragmento condicional, ocurre una SELECCIÓN. ¿Qué imprime si la nota es 7?",
+          "code": "nota = 7\nif nota >= 7:\n    print(\"Aprobado\")\nelse:\n    print(\"Desaprobado\")",
+          "options": [
+            "Desaprobado",
+            "Error, faltan datos",
+            "No imprime nada",
+            "Aprobado"
+          ],
+          "correct": 3,
+          "explanation": "El código evalúa si 'nota >= 7'. Como 7 es igual a 7, la condición da VERDADERO (True) y entra a la rama positiva de la selección, imprimiendo 'Aprobado'.",
+          "timeLimit": 20,
+          "points": 100
+        }
+      ]
+    }
+  ],
+  "custom": [
+    {
+      "id": "AyP41-p-c",
+      "name": "AyP 41 Problemas Computacionales",
+      "emoji": "📚",
+      "description": "Unidad 1: Problemas Computacionales Identificar los elementos necesarios para la resolución de problemas computacionales. Interpretar enunciados de problemas y modelar situaciones problemáticas. Diseñar y evaluar estrategias de solución a problemas computacionales. Aplicar técnicas para la comprensión y resolución de problemas computacionales.",
+      "questions": []
+    }
+  ]
+}

@@ -37,6 +37,8 @@ export default function PlayPage() {
   const pollRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const prevQRef = useRef(-1);
+  const presenceRef = useRef<NodeJS.Timeout | null>(null);
+  const isActiveRef = useRef(true);
 
   const fetchState = useCallback(async () => {
     const r = await fetch("/api/state");
@@ -76,6 +78,56 @@ export default function PlayPage() {
     pollRef.current = setInterval(fetchState, 1500);
     return () => { if (pollRef.current) clearInterval(pollRef.current); };
   }, [joined, fetchState]);
+
+  // ── PRESENCE TRACKING ──
+  useEffect(() => {
+    if (!joined || !playerName) return;
+
+    const sendPresence = (status: "active" | "away") => {
+      fetch("/api/presence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ playerName, status }),
+      }).catch(() => {}); // silent fail
+    };
+
+    const handleVisibility = () => {
+      const active = document.visibilityState === "visible";
+      isActiveRef.current = active;
+      sendPresence(active ? "active" : "away");
+    };
+
+    const handleFocus = () => {
+      isActiveRef.current = true;
+      sendPresence("active");
+    };
+
+    const handleBlur = () => {
+      isActiveRef.current = false;
+      sendPresence("away");
+    };
+
+    // Enviar estado inicial como activo
+    sendPresence("active");
+
+    // Listeners
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("blur", handleBlur);
+
+    // Heartbeat cada 5 segundos
+    presenceRef.current = setInterval(() => {
+      sendPresence(isActiveRef.current ? "active" : "away");
+    }, 5000);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("blur", handleBlur);
+      if (presenceRef.current) clearInterval(presenceRef.current);
+      sendPresence("away"); // al desmontar, marcar como away
+    };
+  }, [joined, playerName]);
 
   // Reset answer state when question changes
   useEffect(() => {
@@ -204,9 +256,8 @@ export default function PlayPage() {
 
   // ── QUESTION ──
   if (state.status === "question") {
-    const questions = getQuestionsByQuizId(state.selectedQuiz || "programacion");
-    const qIdx = state.questionOrder[state.currentQuestion];
-    const q = questions[qIdx];
+    const q: any = (state as any).questionData;
+    if (!q) return <div className="min-h-screen grid place-items-center text-2xl font-bold animate-pulse">Cargando pregunta...</div>;
     const alreadyAnswered = selectedAnswer !== null || answerResult !== null;
     const actualTimeLimit = Math.round(q.timeLimit * (state.timeMultiplier ?? 2));
     const pct = Math.round((timeLeft / actualTimeLimit) * 100);
@@ -249,28 +300,33 @@ export default function PlayPage() {
 
         {/* Options */}
         <div className="grid grid-cols-1 gap-3 flex-1">
-          {q.options.map((opt, i) => {
-            let extra = "";
-            if (answerResult) {
-              if (i === answerResult.correctAnswer) extra = "correct";
-              else if (i === selectedAnswer && !answerResult.correct) extra = "wrong";
-            } else if (selectedAnswer === i) extra = "selected";
+          {(() => {
+            const optionShuffle = state.optionShuffles?.[state.currentQuestion];
+            // Si hay shuffle, mostrar opciones en orden mezclado; si no, en orden original
+            const displayOrder = optionShuffle ?? q.options.map((_: string, i: number) => i);
+            return displayOrder.map((originalIdx: number, displayIdx: number) => {
+              let extra = "";
+              if (answerResult) {
+                if (displayIdx === answerResult.correctAnswer) extra = "correct";
+                else if (displayIdx === selectedAnswer && !answerResult.correct) extra = "wrong";
+              } else if (selectedAnswer === displayIdx) extra = "selected";
 
-            return (
-              <button
-                key={i}
-                onClick={() => handleAnswer(i)}
-                disabled={alreadyAnswered || timeLeft === 0}
-                className={`btn-option ${extra} flex items-center gap-3`}
-              >
-                <span className="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0"
-                  style={{ background: OPTION_COLORS[i], color: "white" }}>
-                  {OPTION_LETTERS[i]}
-                </span>
-                <span className="font-mono">{opt}</span>
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={displayIdx}
+                  onClick={() => handleAnswer(displayIdx)}
+                  disabled={alreadyAnswered || timeLeft === 0}
+                  className={`btn-option ${extra} flex items-center gap-3`}
+                >
+                  <span className="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0"
+                    style={{ background: OPTION_COLORS[displayIdx], color: "white" }}>
+                    {OPTION_LETTERS[displayIdx]}
+                  </span>
+                  <span className="font-mono">{q.options[originalIdx]}</span>
+                </button>
+              );
+            });
+          })()}
         </div>
 
         {/* Answer result */}

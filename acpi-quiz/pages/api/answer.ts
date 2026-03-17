@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { redis } from "../../lib/redis";
 import { GameState, DEFAULT_STATE } from "../../lib/gameState";
-import { getQuestionsByQuizId } from "../../lib/quizzes";
+import { getQuestionsFromDb } from "../../lib/quizzes/db";
 
 const KEY = "acpi_quiz_state";
 
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(404).json({ error: "Jugador no encontrado" });
   }
 
-  const questions = getQuestionsByQuizId(state.selectedQuiz || "programacion");
+  const questions = await getQuestionsFromDb(state.selectedQuiz || "programacion");
   const qIdx = state.questionOrder[state.currentQuestion];
   const question = questions[qIdx];
 
@@ -32,7 +32,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: "Ya respondiste esta pregunta" });
   }
 
-  const isCorrect = answerIndex === question.correct;
+  // Mapear el índice de la respuesta shuffled al índice original
+  const optionShuffle = state.optionShuffles?.[state.currentQuestion];
+  // Si hay shuffle, answerIndex es la posición en la vista mezclada → mapear al original
+  // Si no hay shuffle (backward compat), usar directamente
+  const originalAnswerIndex = optionShuffle ? optionShuffle[answerIndex] : answerIndex;
+  const isCorrect = originalAnswerIndex === question.correct;
+
+  // Encontrar la posición de la respuesta correcta en la vista mezclada (para mostrar al alumno)
+  const shuffledCorrectIndex = optionShuffle
+    ? optionShuffle.indexOf(question.correct)
+    : question.correct;
+
   const elapsed = Date.now() - state.questionStartedAt;
   const multiplier = state.timeMultiplier ?? 2;
   const timeLimit = question.timeLimit * multiplier * 1000;
@@ -59,7 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   return res.status(200).json({
     correct: isCorrect,
     points,
-    correctAnswer: question.correct,
+    correctAnswer: shuffledCorrectIndex, // posición correcta en la vista mezclada
     explanation: question.explanation,
     streak: player.streak,
   });

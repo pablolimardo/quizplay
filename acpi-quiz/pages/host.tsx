@@ -44,8 +44,14 @@ function CircularTimer({ timeLeft, total }: { timeLeft: number; total: number })
 }
 
 /** Genera y descarga un CSV con los resultados de los alumnos */
-function downloadResultsCSV(state: GameState) {
-  const questions = getQuestionsByQuizId(state.selectedQuiz || "programacion");
+async function downloadResultsCSV(state: GameState) {
+  const quizId = state.selectedQuiz || "programacion";
+  
+  // Extraer las preguntas del backend de manera dinámica
+  const res = await fetch(`/api/admin/quizzes/${quizId}`);
+  const data = await res.json();
+  const questions = data.questions || [];
+
   const players = Object.values(state.players).sort((a, b) => b.score - a.score);
   const questionCount = state.questionOrder.length;
 
@@ -61,7 +67,7 @@ function downloadResultsCSV(state: GameState) {
     "Precisión (%)",
     ...state.questionOrder.map((qIdx, i) => {
       const q = questions[qIdx];
-      return `P${i + 1} - ${q.topic}`;
+      return `P${i + 1} - ${q ? q.topic : "Desconocido"}`;
     }),
   ];
 
@@ -115,13 +121,20 @@ export default function HostPage() {
   const [authed, setAuthed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
+  const [fetchError, setFetchError] = useState("");
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Obtener preguntas del quiz seleccionado
+  // Obtener nombre del quiz seleccionado actual
   const selectedQuizId = state?.selectedQuiz || "programacion";
-  const QUESTIONS = getQuestionsByQuizId(selectedQuizId);
-  const activeQuizDef = QUIZ_LIST.find(q => q.id === selectedQuizId) ?? QUIZ_LIST[0];
+  const [allQuizzes, setAllQuizzes] = useState(QUIZ_LIST);
+  const activeQuizDef = allQuizzes.find((q: any) => q.id === selectedQuizId) ?? allQuizzes[0];
+  
+  useEffect(() => {
+    fetch("/api/admin/quizzes").then(res => res.json()).then(data => {
+      setAllQuizzes([...data.static, ...data.custom]);
+    }).catch(e => console.error(e));
+  }, []);
 
   // Auto-reconectar sesión del profe desde localStorage
   useEffect(() => {
@@ -131,10 +144,17 @@ export default function HostPage() {
   }, []);
 
   const fetchState = useCallback(async () => {
-    const r = await fetch("/api/state");
-    const s: GameState = await r.json();
-    setState(s);
-    return s;
+    try {
+      const r = await fetch("/api/state");
+      if (!r.ok) throw new Error(`Error ${r.status}`);
+      const s: GameState = await r.json();
+      setState(s);
+      setFetchError("");
+      return s;
+    } catch (err: any) {
+      setFetchError(err?.message || "Error de conexión");
+      return null;
+    }
   }, []);
 
   const hostAction = useCallback(async (action: string, extra?: Record<string, unknown>) => {
@@ -145,8 +165,16 @@ export default function HostPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, code: HOST_CODE, ...extra }),
       });
+      if (!r.ok) {
+        const d = await r.json().catch(() => ({}));
+        throw new Error(d.error || `Error ${r.status}`);
+      }
       const s: GameState = await r.json();
       setState(s);
+      setFetchError("");
+    } catch (err: any) {
+      setFetchError(err?.message || "Error");
+      setTimeout(() => setFetchError(""), 4000); // limpiar error después de un rato
     } finally {
       setLoading(false);
     }
@@ -163,8 +191,8 @@ export default function HostPage() {
   // Timer local
   useEffect(() => {
     if (!state || state.status !== "question") { setTimeLeft(0); return; }
-    const qIdx = state.questionOrder[state.currentQuestion];
-    const q = QUESTIONS[qIdx];
+    const q = (state as any).questionData;
+    if (!q) return;
     const multiplier = state.timeMultiplier ?? 2;
     const totalTime = Math.round(q.timeLimit * multiplier);
     const elapsed = Math.floor((Date.now() - state.questionStartedAt) / 1000);
@@ -210,7 +238,22 @@ export default function HostPage() {
 
   if (!state) return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="text-purple-400 text-xl animate-pulse">Cargando...</div>
+      <div className="text-center">
+        {fetchError ? (
+          <>
+            <div className="text-5xl mb-4">⚠️</div>
+            <div className="text-red-400 text-xl font-bold mb-2">Error de conexión</div>
+            <div className="text-gray-400 text-sm mb-4">{fetchError}</div>
+            <button onClick={() => fetchState()}
+              className="py-2 px-6 rounded-xl font-bold text-white"
+              style={{ background: "#7c3aed" }}>
+              🔄 Reintentar
+            </button>
+          </>
+        ) : (
+          <div className="text-purple-400 text-xl animate-pulse">Cargando...</div>
+        )}
+      </div>
     </div>
   );
 
@@ -219,15 +262,37 @@ export default function HostPage() {
     ? Object.values(state.players).filter(p => p.answers.length > state.currentQuestion).length
     : 0;
 
-  const currentQ = state.questionOrder.length > 0
-    ? QUESTIONS[state.questionOrder[state.currentQuestion]]
-    : null;
+  const currentQ = (state as any).questionData || null;
 
   const OPTION_LETTERS = ["A", "B", "C", "D"];
   const OPTION_COLORS = ["#3b82f6", "#a855f7", "#f59e0b", "#ec4899"];
 
+  // Helper: determinar estado de presencia visual
+  const getPresenceInfo = (p: { presence?: string; lastPresenceUpdate?: number }) => {
+    const now = Date.now();
+    const lastUpdate = p.lastPresenceUpdate ?? 0;
+    const isStale = now - lastUpdate > 15000; // más de 15s sin heartbeat
+
+    if (isStale || !p.presence) {
+      return { color: "#6b7280", label: "Desconectado", dot: "gray" };
+    }
+    if (p.presence === "active") {
+      return { color: "#22c55e", label: "En línea", dot: "green" };
+    }
+    return { color: "#f59e0b", label: "En otra pestaña", dot: "orange" };
+  };
+
   // ── WAITING ──
   if (state.status === "waiting") {
+    const activePlayers = players.filter(p => {
+      const info = getPresenceInfo(p);
+      return info.dot === "green";
+    }).length;
+    const awayPlayers = players.filter(p => {
+      const info = getPresenceInfo(p);
+      return info.dot === "orange";
+    }).length;
+
     return (
       <div className="min-h-screen p-8 flex flex-col">
         <div className="flex items-center justify-between mb-8">
@@ -236,9 +301,28 @@ export default function HostPage() {
             <p className="text-gray-400 mt-1">
               {activeQuizDef.emoji} {activeQuizDef.name} · {players.length} jugadores conectados
             </p>
+            {players.length > 0 && (
+              <div className="flex items-center gap-4 mt-2">
+                <span className="flex items-center gap-1 text-sm">
+                  <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: "#22c55e" }} />
+                  <span style={{ color: "#22c55e" }}>{activePlayers} atentos</span>
+                </span>
+                {awayPlayers > 0 && (
+                  <span className="flex items-center gap-1 text-sm">
+                    <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: "#f59e0b" }} />
+                    <span style={{ color: "#f59e0b" }}>{awayPlayers} distraídos</span>
+                  </span>
+                )}
+              </div>
+            )}
           </div>
           {players.length > 0 ? (
-            <button onClick={() => hostAction("start_question")} disabled={loading}
+            <button onClick={() => {
+              if (activeQuizDef?.questions?.length === 0) {
+                alert("¡Error! Este cuestionario no tiene preguntas generadas."); return;
+              }
+              hostAction("start_question");
+            }} disabled={loading || activeQuizDef?.questions?.length === 0}
               className="py-3 px-8 rounded-xl font-bold text-xl transition-all hover:scale-105 disabled:opacity-50"
               style={{ background: "linear-gradient(135deg, #22c55e, #16a34a)" }}>
               ▶ Iniciar juego
@@ -262,27 +346,54 @@ export default function HostPage() {
             </div>
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-              {players.map((p) => (
-                <div key={p.name} className="pop-in rounded-xl p-3 text-center"
-                  style={{ background: "#1a1030", border: "1px solid #2d1f4e" }}>
-                  <div className="text-2xl mb-1">
-                    {["😎", "🦊", "🐉", "🤖", "🦁", "⚡", "🎯", "🔥"][p.name.charCodeAt(0) % 8]}
+              {players.map((p) => {
+                const presence = getPresenceInfo(p);
+                return (
+                  <div key={p.name} className="pop-in rounded-xl p-3 text-center relative"
+                    style={{
+                      background: "#1a1030",
+                      border: `1px solid ${presence.dot === "orange" ? "#f59e0b55" : presence.dot === "green" ? "#22c55e33" : "#2d1f4e"}`,
+                    }}>
+                    {/* Indicador de presencia */}
+                    <div className="absolute top-2 right-2 flex items-center gap-1" title={presence.label}>
+                      <span
+                        className="inline-block w-2.5 h-2.5 rounded-full"
+                        style={{
+                          background: presence.color,
+                          boxShadow: presence.dot === "green" ? `0 0 6px ${presence.color}` : "none",
+                          animation: presence.dot === "green" ? "pulse-presence 2s infinite" : "none",
+                        }}
+                      />
+                    </div>
+                    <div className="text-2xl mb-1">
+                      {["😎", "🦊", "🐉", "🤖", "🦁", "⚡", "🎯", "🔥"][p.name.charCodeAt(0) % 8]}
+                    </div>
+                    <div className="text-sm font-medium truncate">{p.name}</div>
+                    <div className="text-xs mt-1" style={{ color: presence.color }}>
+                      {presence.label}
+                    </div>
                   </div>
-                  <div className="text-sm font-medium truncate">{p.name}</div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
 
         {/* Selector de Quiz */}
         <div className="mt-6 rounded-2xl p-5" style={{ background: "#1a1030", border: "1px solid #2d1f4e" }}>
-          <div className="mb-4">
-            <h3 className="font-bold text-lg">📚 Seleccionar Quiz</h3>
-            <p className="text-gray-500 text-sm">Elegí el tema de preguntas para esta ronda</p>
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h3 className="font-bold text-lg">📚 Seleccionar Quiz</h3>
+              <p className="text-gray-500 text-sm">Elegí el cuestionario para jugar esta ronda.</p>
+            </div>
+            <button 
+              onClick={() => window.open("/host/crud", "_blank")}
+              className="bg-purple-900 border border-purple-600 hover:bg-purple-800 text-purple-200 px-4 py-2 rounded-xl text-sm font-bold transition">
+              🛠️ Gestionar (CRUD y AI)
+            </button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {QUIZ_LIST.map((quiz) => {
+            {allQuizzes.map((quiz: any) => {
               const isActive = selectedQuizId === quiz.id;
               return (
                 <button
@@ -353,6 +464,22 @@ export default function HostPage() {
     );
   }
 
+  // ── ERROR RECOVERY (Vacío) ──
+  if (state.status === "question" && !currentQ) {
+    return (
+      <div className="min-h-screen flex items-center justify-center flex-col text-center p-8 bg-[#0f0e17]">
+        <div className="text-6xl mb-4">⚠️</div>
+        <h1 className="text-3xl font-bold mb-3 text-red-500">Cuestionario Vacío o Roto</h1>
+        <p className="text-gray-400 mb-8 max-w-lg">
+          La partida está trabada porque intentó leer una pregunta pero el Cuestionario seleccionado ("{activeQuizDef?.name}") no tiene preguntas válidas o fue borrado.
+        </p>
+        <button onClick={() => hostAction("reset")} className="bg-purple-600 hover:bg-purple-500 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all hover:scale-105 shadow-lg shadow-purple-500/50">
+          ⚙️ Restablecer a Preparación
+        </button>
+      </div>
+    );
+  }
+
   // ── QUESTION ──
   if (state.status === "question" && currentQ) {
     return (
@@ -387,28 +514,50 @@ export default function HostPage() {
           {currentQ.code && <CodeBlock code={currentQ.code} language={currentQ.language} />}
 
           <div className="grid grid-cols-2 gap-4 mt-6">
-            {currentQ.options.map((opt, i) => (
-              <div key={i} className="rounded-xl p-4 flex items-center gap-3"
-                style={{ background: OPTION_COLORS[i] + "22", border: `2px solid ${OPTION_COLORS[i]}55` }}>
-                <span className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg flex-shrink-0"
-                  style={{ background: OPTION_COLORS[i], color: "white" }}>
-                  {OPTION_LETTERS[i]}
-                </span>
-                <span className="font-mono text-lg">{opt}</span>
-              </div>
-            ))}
+            {(() => {
+              const optionShuffle = state.optionShuffles?.[state.currentQuestion];
+              const displayOrder = optionShuffle ?? currentQ.options.map((_: string, i: number) => i);
+              return displayOrder.map((originalIdx: number, displayIdx: number) => (
+                <div key={displayIdx} className="rounded-xl p-4 flex items-center gap-3"
+                  style={{ background: OPTION_COLORS[displayIdx] + "22", border: `2px solid ${OPTION_COLORS[displayIdx]}55` }}>
+                  <span className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg flex-shrink-0"
+                    style={{ background: OPTION_COLORS[displayIdx], color: "white" }}>
+                    {OPTION_LETTERS[displayIdx]}
+                  </span>
+                  <span className="font-mono text-lg">{currentQ.options[originalIdx]}</span>
+                </div>
+              ));
+            })()}
           </div>
         </div>
 
-        {/* Mini leaderboard */}
-        <div className="flex gap-3">
-          {players.slice(0, 6).map((p, i) => (
-            <div key={p.name} className="flex-1 rounded-xl p-2 text-center text-sm"
-              style={{ background: "#1a1030", border: "1px solid #2d1f4e" }}>
-              <div className="font-bold truncate">{p.name}</div>
-              <div style={{ color: "#a78bfa" }}>{p.score}</div>
-            </div>
-          ))}
+        {/* Monitoreo de Alumnos */}
+        <div className="mt-auto">
+          <div className="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Monitoreo del Aula</div>
+          <div className="flex flex-wrap gap-2">
+            {players.map((p) => {
+              const presence = getPresenceInfo(p);
+              const hasAnswered = p.answers.length > state.currentQuestion;
+              return (
+                <div key={p.name} className="flex items-center gap-2 rounded-lg px-3 py-2 transition-all"
+                  style={{
+                    background: hasAnswered ? "#14532d" : "#1a1030",
+                    border: `1px solid ${hasAnswered ? "#22c55e" : "#2d1f4e"}`,
+                    opacity: presence.dot === "gray" ? 0.5 : 1
+                  }}>
+                  <span
+                    className="w-2.5 h-2.5 rounded-full"
+                    style={{
+                      background: presence.color,
+                      boxShadow: presence.dot === "green" ? `0 0 6px ${presence.color}` : "none",
+                    }}
+                    title={presence.label}
+                  />
+                  <span className="text-sm font-bold truncate max-w-[100px]">{p.name}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     );
@@ -446,20 +595,27 @@ export default function HostPage() {
 
         {/* Options with highlight */}
         <div className="grid grid-cols-2 gap-4 mb-6">
-          {currentQ.options.map((opt, i) => (
-            <div key={i} className="rounded-xl p-4 flex items-center gap-3 transition-all"
-              style={{
-                background: i === currentQ.correct ? "#14532d" : "#1a1030",
-                border: `2px solid ${i === currentQ.correct ? "#22c55e" : "#2d1f4e"}`,
-                transform: i === currentQ.correct ? "scale(1.02)" : "scale(1)",
-              }}>
-              <span className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg flex-shrink-0"
-                style={{ background: i === currentQ.correct ? "#22c55e" : "#374151", color: "white" }}>
-                {i === currentQ.correct ? "✓" : OPTION_LETTERS[i]}
-              </span>
-              <span className="font-mono text-lg">{opt}</span>
-            </div>
-          ))}
+          {(() => {
+            const optionShuffle = state.optionShuffles?.[state.currentQuestion];
+            const displayOrder = optionShuffle ?? currentQ.options.map((_: string, i: number) => i);
+            return displayOrder.map((originalIdx: number, displayIdx: number) => {
+              const isCorrectOption = originalIdx === currentQ.correct;
+              return (
+                <div key={displayIdx} className="rounded-xl p-4 flex items-center gap-3 transition-all"
+                  style={{
+                    background: isCorrectOption ? "#14532d" : "#1a1030",
+                    border: `2px solid ${isCorrectOption ? "#22c55e" : "#2d1f4e"}`,
+                    transform: isCorrectOption ? "scale(1.02)" : "scale(1)",
+                  }}>
+                  <span className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg flex-shrink-0"
+                    style={{ background: isCorrectOption ? "#22c55e" : "#374151", color: "white" }}>
+                    {isCorrectOption ? "✓" : OPTION_LETTERS[displayIdx]}
+                  </span>
+                  <span className="font-mono text-lg">{currentQ.options[originalIdx]}</span>
+                </div>
+              );
+            });
+          })()}
         </div>
 
         {/* Explanation */}
@@ -483,16 +639,47 @@ export default function HostPage() {
           ))}
         </div>
 
-        {/* Top 5 */}
-        <div className="flex gap-3">
-          {players.slice(0, 5).map((p, i) => (
-            <div key={p.name} className="flex-1 rounded-xl p-3 text-center"
-              style={{ background: "#1a1030", border: "1px solid #2d1f4e" }}>
-              <div className="text-xs text-gray-500 mb-1">#{i + 1}</div>
-              <div className="font-bold text-sm truncate">{p.name}</div>
-              <div className="font-bold mt-1" style={{ color: "#a78bfa" }}>{p.score}</div>
-            </div>
-          ))}
+        {/* Monitoreo de Alumnos */}
+        <div className="mt-auto pt-2">
+          <div className="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Monitoreo del Aula</div>
+          <div className="flex flex-wrap gap-2">
+            {players.map((p) => {
+              const presence = getPresenceInfo(p);
+              const isCorrect = p.answers[state.currentQuestion] === true;
+              const isWrong = p.answers[state.currentQuestion] === false;
+              const hasAnswered = isCorrect || isWrong;
+              
+              let bgColor = "#1a1030";
+              let borderColor = "#2d1f4e";
+              
+              if (isCorrect) {
+                bgColor = "#14532d";
+                borderColor = "#22c55e";
+              } else if (isWrong) {
+                bgColor = "#7f1d1d";
+                borderColor = "#ef4444";
+              }
+
+              return (
+                <div key={p.name} className="flex items-center gap-2 rounded-lg px-3 py-2 transition-all"
+                  style={{
+                    background: bgColor,
+                    border: `1px solid ${borderColor}`,
+                    opacity: presence.dot === "gray" ? 0.5 : 1
+                  }}>
+                  <span
+                    className="w-2.5 h-2.5 rounded-full"
+                    style={{
+                      background: presence.color,
+                      boxShadow: presence.dot === "green" ? `0 0 6px ${presence.color}` : "none",
+                    }}
+                    title={presence.label}
+                  />
+                  <span className="text-sm font-bold truncate max-w-[100px]">{p.name}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     );

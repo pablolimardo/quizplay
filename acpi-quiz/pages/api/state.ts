@@ -2,12 +2,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { redis } from "../../lib/redis";
 import { GameState, DEFAULT_STATE } from "../../lib/gameState";
+import { enhanceStateWithQuestion } from "../../lib/quizzes/db";
 
 const KEY = "acpi_quiz_state";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
-    const state = (await redis.get<GameState>(KEY)) ?? DEFAULT_STATE;
+    const rawState = (await redis.get<GameState>(KEY)) ?? DEFAULT_STATE;
+    const state = await enhanceStateWithQuestion(rawState as GameState);
     return res.status(200).json(state);
   }
 

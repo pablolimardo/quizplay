@@ -13,6 +13,8 @@ export interface Player {
   streak: number;
   answers: (boolean | null)[]; // null = no respondió
   lastAnswerTime?: number;
+  presence?: "active" | "away"; // estado de presencia del alumno
+  lastPresenceUpdate?: number; // timestamp de última actualización
 }
 
 export interface GameState {
@@ -25,6 +27,7 @@ export interface GameState {
   previousQuestions: number[]; // preguntas de la ronda anterior (para no repetir)
   timeMultiplier: number; // multiplicador de tiempo (1 = normal, 2 = doble, etc.)
   selectedQuiz: string; // ID del quiz seleccionado
+  optionShuffles: number[][]; // para cada pregunta de la ronda, el orden mezclado de opciones [ej: [2,0,3,1]]
   updatedAt: number;
 }
 
@@ -38,5 +41,6 @@ export const DEFAULT_STATE: GameState = {
   previousQuestions: [],
   timeMultiplier: 2, // doble de tiempo por defecto
   selectedQuiz: "programacion", // quiz por defecto
+  optionShuffles: [],
   updatedAt: Date.now(),
 };
