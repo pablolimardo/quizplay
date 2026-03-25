@@ -7,6 +7,7 @@ import { MMO_QUESTIONS } from "./mmo";
 import { ESCUELA_QUESTIONS } from "./escuela";
 import { PROG_GENERAL_QUESTIONS } from "./prog-general";
 import { PROG_ESTRUCTURADA_QUESTIONS } from "./prog-estructurada";
+import { PROG_3_IMPERATIVO_QUESTIONS } from "./prog-imperativo";
 
 export interface QuizDefinition {
   id: string;
@@ -58,6 +59,13 @@ export const QUIZ_LIST: QuizDefinition[] = [
     emoji: "🧠",
     description: "Diseño de algoritmos, paradigma imperativo, secuencias y selección - 5 preguntas",
     questions: PROG_ESTRUCTURADA_QUESTIONS,
+  },
+  {
+    id: "prog31-a2",
+    name: "Prog31 A2",
+    emoji: "🐍",
+    description: "Variables, tipos, E/S, operadores, comparación, lógica y condicionales en Python - 20 preguntas",
+    questions: PROG_3_IMPERATIVO_QUESTIONS,
   },
 ];
 
