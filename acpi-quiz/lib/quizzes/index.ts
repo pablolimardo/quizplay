@@ -64,7 +64,7 @@ export const QUIZ_LIST: QuizDefinition[] = [
     id: "prog31-a2",
     name: "Prog31 A2",
     emoji: "🐍",
-    description: "Variables, tipos, E/S, operadores, comparación, lógica y condicionales en Python - 20 preguntas",
+    description: "Variables, tipos, E/S, operadores y condicionales en Python - 10 preguntas",
     questions: PROG_3_IMPERATIVO_QUESTIONS,
   },
 ];

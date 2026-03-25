@@ -43,25 +43,6 @@ export const PROG_3_IMPERATIVO_QUESTIONS: Question[] = [
     topic: "Variables y Tipos",
     type: "code",
     language: "python",
-    question: "¿Qué tipo de dato devuelve type() para cada variable?",
-    code: `sensor_pin = 7\ntemperatura = 85.3\nnombre = "DHT11"\nalarma = True\nprint(type(sensor_pin))`,
-    options: [
-      "<class 'float'>",
-      "<class 'str'>",
-      "<class 'int'>",
-      "<class 'bool'>",
-    ],
-    correct: 2,
-    explanation: "sensor_pin = 7 es un número entero sin decimales, entonces Python lo reconoce como int. Si hubiera sido 7.0 ya sería float. La función type() nos permite verificar el tipo de cualquier variable.",
-    timeLimit: 25,
-    points: 150,
-  },
-
-  {
-    id: 4,
-    topic: "Variables y Tipos",
-    type: "code",
-    language: "python",
     question: "¿Cuál de estas declaraciones de variable es incorrecta según las reglas de Python?",
     options: [
       "temperatura_maxima = 90",
@@ -78,7 +59,7 @@ export const PROG_3_IMPERATIVO_QUESTIONS: Question[] = [
   // ── ENTRADA Y SALIDA ─────────────────────────────────────────
 
   {
-    id: 5,
+    id: 4,
     topic: "Entrada y Salida",
     type: "theory",
     question: "¿Por qué hay que usar float(input(...)) y no solo input(...) cuando queremos leer un número decimal?",
@@ -95,7 +76,7 @@ export const PROG_3_IMPERATIVO_QUESTIONS: Question[] = [
   },
 
   {
-    id: 6,
+    id: 5,
     topic: "Entrada y Salida",
     type: "code",
     language: "python",
@@ -113,47 +94,11 @@ export const PROG_3_IMPERATIVO_QUESTIONS: Question[] = [
     points: 150,
   },
 
-  // ── OPERADORES ARITMÉTICOS ───────────────────────────────────
+  // ── OPERADORES ───────────────────────────────────────────────
 
   {
-    id: 7,
-    topic: "Operadores Aritméticos",
-    type: "theory",
-    question: "¿Qué hace el operador % (módulo) en Python?",
-    options: [
-      "Calcula el porcentaje entre dos números",
-      "Devuelve el cociente entero de una división",
-      "Devuelve el resto de la división entre dos números",
-      "Multiplica dos números y divide por 100",
-    ],
-    correct: 2,
-    explanation: "El operador % devuelve el RESTO de la división. Por ejemplo, 17 % 5 = 2 porque 17 = 5×3 + 2. Es muy útil para saber si un número es par (n % 2 == 0) o para ciclos que se repiten cada N pasos.",
-    timeLimit: 20,
-    points: 100,
-  },
-
-  {
-    id: 8,
-    topic: "Operadores Aritméticos",
-    type: "code",
-    language: "python",
-    question: "Una bomba consume 2.5 kW/hora. ¿Cuánto imprime este programa si funcionó 8 horas?",
-    code: `horas = 8\nconsumo_kw = 2.5\ntotal = consumo_kw * horas\ncosto = total * 180\nprint(f"Consumo: {total} kWh | Costo: \${costo}")`,
-    options: [
-      "Consumo: 10.5 kWh | Costo: $1800",
-      "Consumo: 20.0 kWh | Costo: $3600",
-      "Consumo: 2.5 kWh | Costo: $450",
-      "Consumo: 10.0 kWh | Costo: $3600",
-    ],
-    correct: 3,
-    explanation: "Consumo total = 2.5 × 8 = 20.0 kWh. Costo = 20.0 × 180 = 3600. El f-string muestra ambos resultados en una sola línea. Cuidado: la respuesta C confunde el consumo por hora con el total.",
-    timeLimit: 25,
-    points: 150,
-  },
-
-  {
-    id: 9,
-    topic: "Operadores Aritméticos",
+    id: 6,
+    topic: "Operadores",
     type: "code",
     language: "python",
     question: "¿Cuál es la diferencia entre / y // en Python?",
@@ -170,28 +115,9 @@ export const PROG_3_IMPERATIVO_QUESTIONS: Question[] = [
     points: 100,
   },
 
-  // ── OPERADORES DE COMPARACIÓN ────────────────────────────────
-
   {
-    id: 10,
-    topic: "Operadores de Comparación",
-    type: "theory",
-    question: "¿Qué tipo de dato devuelve siempre una expresión de comparación como temperatura > 80?",
-    options: [
-      "int — devuelve 0 o 1",
-      "float — devuelve el resultado decimal",
-      "bool — devuelve True o False",
-      "str — devuelve 'mayor' o 'menor'",
-    ],
-    correct: 2,
-    explanation: "Cualquier comparación en Python devuelve un valor booleano: True (verdadero) o False (falso). Es por eso que podemos usar comparaciones directamente en un if: el if evalúa si la condición es True o False.",
-    timeLimit: 20,
-    points: 100,
-  },
-
-  {
-    id: 11,
-    topic: "Operadores de Comparación",
+    id: 7,
+    topic: "Operadores",
     type: "code",
     language: "python",
     question: "¿Cuál es la diferencia entre = y == en Python?",
@@ -208,29 +134,10 @@ export const PROG_3_IMPERATIVO_QUESTIONS: Question[] = [
     points: 100,
   },
 
-  {
-    id: 12,
-    topic: "Operadores de Comparación",
-    type: "code",
-    language: "python",
-    question: "Un sensor mide presión. ¿Qué imprime este programa si presion = 4.2?",
-    code: `presion = 4.2\nif presion >= 4.0 and presion <= 6.0:\n    print("Presión normal")\nelif presion < 4.0:\n    print("Presión baja")\nelse:\n    print("Presión alta")`,
-    options: [
-      "Presión baja",
-      "Presión alta",
-      "Presión normal",
-      "No imprime nada",
-    ],
-    correct: 2,
-    explanation: "4.2 cumple la condición 4.2 >= 4.0 (verdadero) AND 4.2 <= 6.0 (verdadero). Como ambas son verdaderas, la condición completa es True y entra al primer bloque imprimiendo 'Presión normal'.",
-    timeLimit: 25,
-    points: 150,
-  },
-
   // ── OPERADORES LÓGICOS ───────────────────────────────────────
 
   {
-    id: 13,
+    id: 8,
     topic: "Operadores Lógicos",
     type: "theory",
     question: "¿Cuándo devuelve True el operador and?",
@@ -246,82 +153,10 @@ export const PROG_3_IMPERATIVO_QUESTIONS: Question[] = [
     points: 100,
   },
 
-  {
-    id: 14,
-    topic: "Operadores Lógicos",
-    type: "theory",
-    question: "¿Cuándo devuelve True el operador or?",
-    options: [
-      "Solo cuando ambas condiciones son verdaderas",
-      "Cuando al menos una de las condiciones es verdadera",
-      "Solo cuando la primera condición es verdadera",
-      "Cuando ninguna condición es verdadera",
-    ],
-    correct: 1,
-    explanation: "El operador or es más permisivo: devuelve True si AL MENOS UNA condición es verdadera. Solo devuelve False cuando TODAS son falsas. Es como una alarma que suena si hay humo OR si hay calor — basta con una sola condición.",
-    timeLimit: 20,
-    points: 100,
-  },
-
-  {
-    id: 15,
-    topic: "Operadores Lógicos",
-    type: "code",
-    language: "python",
-    question: "Un motor arranca solo si tensión está entre 210V y 230V AND corriente < 15A. Si tension = 220 y corriente = 16, ¿qué imprime?",
-    code: `tension = 220\ncorriente = 16\ntension_ok = tension >= 210 and tension <= 230\ncorriente_ok = corriente < 15\nif tension_ok and corriente_ok:\n    print("Arranque seguro")\nelse:\n    print("Arranque bloqueado")`,
-    options: [
-      "Arranque seguro",
-      "Arranque bloqueado",
-      "Error: condición inválida",
-      "No imprime nada",
-    ],
-    correct: 1,
-    explanation: "tension_ok = (220 >= 210 AND 220 <= 230) = True. corriente_ok = (16 < 15) = False. La condición final es True AND False = False. Como la condición completa es False, entra al else e imprime 'Arranque bloqueado'.",
-    timeLimit: 25,
-    points: 150,
-  },
-
-  {
-    id: 16,
-    topic: "Operadores Lógicos",
-    type: "code",
-    language: "python",
-    question: "Una alarma se activa si temperatura > 90 OR presion > 6. Si temp = 85 y presion = 7, ¿qué imprime?",
-    code: `temperatura = 85\npresion = 7\nif temperatura > 90 or presion > 6:\n    print("ALARMA ACTIVA")\nelse:\n    print("Sistema normal")`,
-    options: [
-      "Sistema normal",
-      "ALARMA ACTIVA",
-      "Error: dos condiciones no se pueden combinar",
-      "No imprime nada",
-    ],
-    correct: 1,
-    explanation: "temperatura > 90 es False (85 no supera 90). presion > 6 es True (7 supera 6). False OR True = True. Basta que UNA condición sea verdadera para que or devuelva True, por eso se activa la alarma.",
-    timeLimit: 20,
-    points: 100,
-  },
-
   // ── CONDICIONALES ────────────────────────────────────────────
 
   {
-    id: 17,
-    topic: "Estructuras Condicionales",
-    type: "theory",
-    question: "¿Cuál es la diferencia entre usar elif y usar un segundo if independiente?",
-    options: [
-      "No hay diferencia, son equivalentes siempre",
-      "elif solo se evalúa si el if anterior fue False; un segundo if se evalúa siempre",
-      "elif es más rápido que if en todos los casos",
-      "elif permite más de dos opciones, if solo dos",
-    ],
-    correct: 1,
-    explanation: "Con elif, si el primer if es True, Python saltea todos los elif siguientes. Con un segundo if independiente, Python lo evalúa siempre, aunque el primero ya haya sido True. Esto importa cuando las condiciones no son excluyentes.",
-    timeLimit: 25,
-    points: 150,
-  },
-
-  {
-    id: 18,
+    id: 9,
     topic: "Estructuras Condicionales",
     type: "code",
     language: "python",
@@ -340,7 +175,7 @@ export const PROG_3_IMPERATIVO_QUESTIONS: Question[] = [
   },
 
   {
-    id: 19,
+    id: 10,
     topic: "Estructuras Condicionales",
     type: "code",
     language: "python",
@@ -354,25 +189,6 @@ export const PROG_3_IMPERATIVO_QUESTIONS: Question[] = [
     ],
     correct: 1,
     explanation: "Con tres if independientes, si nota = 11: el primero (>=7) es True → imprime 'Aprobado'. El segundo (<7) es False → no imprime. El tercero (>10) es True → imprime 'Nota inválida'. Se imprimen dos mensajes para una sola nota. La solución es usar elif y mover la validación al principio.",
-    timeLimit: 30,
-    points: 200,
-  },
-
-  {
-    id: 20,
-    topic: "Estructuras Condicionales",
-    type: "code",
-    language: "python",
-    question: "Un sistema habilita el arranque si puerta == 'cerrada' AND presion > 4 AND codigo == 1234. Si solo falla la presión (es 3.5), ¿qué imprime?",
-    code: `puerta = "cerrada"\npresion = 3.5\ncodigo = 1234\nif puerta == "cerrada" and presion > 4 and codigo == 1234:\n    print("Arranque habilitado")\nelif puerta != "cerrada":\n    print("Bloqueado: puerta abierta")\nelif presion <= 4:\n    print("Bloqueado: presión insuficiente")\nelse:\n    print("Bloqueado: código incorrecto")`,
-    options: [
-      "Arranque habilitado",
-      "Bloqueado: puerta abierta",
-      "Bloqueado: presión insuficiente",
-      "Bloqueado: código incorrecto",
-    ],
-    correct: 2,
-    explanation: "El primer if es False porque presion > 4 falla (3.5 no supera 4). El primer elif compara puerta != 'cerrada', que es False. El segundo elif evalúa presion <= 4, que es True (3.5 <= 4), entonces imprime 'Bloqueado: presión insuficiente'.",
     timeLimit: 30,
     points: 200,
   },
