@@ -17,6 +17,30 @@ export default function CrudAdmin() {
 
   const [aiTopic, setAiTopic] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+
+  const handleResetGame = async () => {
+    if (!confirm("¿Seguro que querés reiniciar la partida actual? Esto borrará los puntajes y desconectará a los jugadores (volverán a la pantalla de espera).")) return;
+    setIsResetting(true);
+    try {
+      const res = await fetch("/api/host", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // Usamos el código por defecto, si el usuario tiene uno custom debería estar centralizado
+        body: JSON.stringify({ action: "reset", code: "acpi2026" }), 
+      });
+      if (res.ok) {
+        alert("♻️ Partida reiniciada con éxito. Los alumnos volverán a la sala de espera.");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert("Error: " + (data.error || "No se pudo reiniciar"));
+      }
+    } catch(e) { 
+      alert("Error de conexión");
+    } finally {
+      setIsResetting(false);
+    }
+  };
 
   useEffect(() => {
     fetchQuizzes();
@@ -124,11 +148,19 @@ export default function CrudAdmin() {
             </h1>
             <p className="text-gray-400 mt-1">Crea nuevos quizzes y auto-generá preguntas con Inteligencia Artificial.</p>
           </div>
-          <Link href="/host">
-            <button className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-xl text-sm font-bold transition">
-              Volver al Panel Host
+          <div className="flex gap-2">
+            <button 
+              onClick={handleResetGame}
+              disabled={isResetting}
+              className="bg-red-900/50 border border-red-600 hover:bg-red-800 text-red-200 px-4 py-2 rounded-xl text-sm font-bold transition">
+              {isResetting ? "Reiniciando..." : "♻️ Reiniciar Partida"}
             </button>
-          </Link>
+            <Link href="/host">
+              <button className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-xl text-sm font-bold transition">
+                Volver al Panel Host
+              </button>
+            </Link>
+          </div>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
