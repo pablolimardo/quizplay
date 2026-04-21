@@ -75,7 +75,7 @@ async function downloadResultsCSV(state: GameState) {
   const rows = players.map((p, rank) => {
     const correctas = p.answers.filter(a => a === true).length;
     const incorrectas = p.answers.filter(a => a === false).length;
-    const sinResponder = questionCount - p.answers.length;
+    const sinResponder = Math.max(0, questionCount - p.answers.length);
     const precision = questionCount > 0 ? Math.round((correctas / questionCount) * 100) : 0;
 
     const perQuestion = state.questionOrder.map((_, i) => {
@@ -127,8 +127,10 @@ export default function HostPage() {
 
   // Obtener nombre del quiz seleccionado actual
   const selectedQuizId = state?.selectedQuiz || "programacion";
-  const [allQuizzes, setAllQuizzes] = useState(QUIZ_LIST);
-  const activeQuizDef = allQuizzes.find((q: any) => q.id === selectedQuizId) ?? allQuizzes[0];
+  const [allQuizzes, setAllQuizzes] = useState<any[]>([]);
+  // Si no cargó aún, usamos QUIZ_LIST para no mostrar nada roto, pero una vez que cargue usa la data real.
+  const quizzesToSearch = allQuizzes.length > 0 ? allQuizzes : QUIZ_LIST;
+  const activeQuizDef = quizzesToSearch.find((q: any) => q.id === selectedQuizId) ?? QUIZ_LIST[0];
   
   useEffect(() => {
     fetch("/api/admin/quizzes").then(res => res.json()).then(data => {
@@ -146,7 +148,10 @@ export default function HostPage() {
   const fetchState = useCallback(async () => {
     try {
       const r = await fetch("/api/state");
-      if (!r.ok) throw new Error(`Error ${r.status}`);
+      if (!r.ok) {
+        const errData = await r.json().catch(() => ({}));
+        throw new Error(errData.error || `Error ${r.status}`);
+      }
       const s: GameState = await r.json();
       setState(s);
       setFetchError("");
@@ -221,11 +226,27 @@ export default function HostPage() {
             placeholder="Código de acceso"
             value={authCode}
             onChange={(e) => setAuthCode(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && authCode === HOST_CODE && (() => { setAuthed(true); localStorage.setItem("acpi_host_authed", "true"); })()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                if (authCode === HOST_CODE) {
+                  setAuthed(true);
+                  localStorage.setItem("acpi_host_authed", "true");
+                } else {
+                  alert("Código incorrecto localmente. Si lo cambiaste en Vercel, usá ese.");
+                }
+              }
+            }}
             className="w-full p-3 rounded-xl mb-4 text-center font-mono bg-black/40 border border-gray-700 outline-none focus:border-purple-500 text-white"
           />
           <button
-            onClick={() => authCode === HOST_CODE ? (() => { setAuthed(true); localStorage.setItem("acpi_host_authed", "true"); })() : alert("Código incorrecto")}
+            onClick={() => {
+              if (authCode === HOST_CODE) {
+                setAuthed(true);
+                localStorage.setItem("acpi_host_authed", "true");
+              } else {
+                alert("Código incorrecto");
+              }
+            }}
             className="w-full py-3 rounded-xl font-bold text-white"
             style={{ background: "#7c3aed" }}
           >
@@ -295,6 +316,13 @@ export default function HostPage() {
 
     return (
       <div className="min-h-screen p-8 flex flex-col">
+        {fetchError && (
+          <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce">
+            <span className="text-xl">⚠️</span>
+            <span className="font-bold">{fetchError}</span>
+          </div>
+        )}
+
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold" style={{ color: "#a78bfa" }}>🤖 ACPI Quiz</h1>
@@ -484,6 +512,12 @@ export default function HostPage() {
   if (state.status === "question" && currentQ) {
     return (
       <div className="min-h-screen p-8 flex flex-col">
+        {fetchError && (
+          <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce">
+            <span className="text-xl">⚠️</span>
+            <span className="font-bold">{fetchError}</span>
+          </div>
+        )}
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
@@ -572,6 +606,12 @@ export default function HostPage() {
 
     return (
       <div className="min-h-screen p-8 flex flex-col">
+        {fetchError && (
+          <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce">
+            <span className="text-xl">⚠️</span>
+            <span className="font-bold">{fetchError}</span>
+          </div>
+        )}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-3xl font-bold">{currentQ.question}</h2>
           <div className="flex gap-3">

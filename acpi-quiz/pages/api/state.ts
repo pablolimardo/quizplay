@@ -7,18 +7,23 @@ import { enhanceStateWithQuestion } from "../../lib/quizzes/db";
 const KEY = "acpi_quiz_state";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
-    const rawState = (await redis.get<GameState>(KEY)) ?? DEFAULT_STATE;
-    const state = await enhanceStateWithQuestion(rawState as GameState);
-    return res.status(200).json(state);
-  }
+  try {
+    if (req.method === "GET") {
+      const rawState = (await redis.get<GameState>(KEY)) ?? DEFAULT_STATE;
+      const state = await enhanceStateWithQuestion(rawState as GameState);
+      return res.status(200).json(state);
+    }
 
-  if (req.method === "POST") {
-    const state: GameState = req.body;
-    state.updatedAt = Date.now();
-    await redis.set(KEY, JSON.stringify(state), { ex: 60 * 60 * 4 }); // TTL 4 horas
-    return res.status(200).json({ ok: true });
-  }
+    if (req.method === "POST") {
+      const state: GameState = req.body;
+      state.updatedAt = Date.now();
+      await redis.set(KEY, JSON.stringify(state), { ex: 60 * 60 * 4 });
+      return res.status(200).json({ ok: true });
+    }
 
-  res.status(405).end();
+    res.status(405).end();
+  } catch (error: any) {
+    console.error("API State Error:", error);
+    res.status(500).json({ error: error.message || "Internal Server Error" });
+  }
 }

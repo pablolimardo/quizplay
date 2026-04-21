@@ -40,14 +40,15 @@ async function generateOptionShuffles(questionOrder: number[], quizId: string): 
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") return res.status(405).end();
+  try {
+    if (req.method !== "POST") return res.status(405).end();
 
-  const { action, code } = req.body;
+    const { action, code } = req.body;
 
-  // Verificación simple con clave en variables de entorno (o default local)
-  if (code !== HOST_CODE) {
-    return res.status(401).json({ error: "Código incorrecto" });
-  }
+    // Verificación simple con clave en variables de entorno (o default local)
+    if (code !== HOST_CODE) {
+      return res.status(401).json({ error: "Código incorrecto" });
+    }
 
   const state: GameState = (await redis.get<GameState>(KEY)) ?? { ...DEFAULT_STATE };
   if (!state.selectedQuiz) state.selectedQuiz = "programacion";
@@ -155,5 +156,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     default:
       return res.status(400).json({ error: "Acción desconocida" });
+    }
+  } catch (error: any) {
+    console.error("API Host Error:", error);
+    res.status(500).json({ error: error.message || "Internal Server Error" });
   }
 }

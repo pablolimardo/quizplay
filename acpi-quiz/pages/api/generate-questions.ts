@@ -27,7 +27,7 @@ El formato DEBE ser un ARRAY JSON ÚNICAMENTE, sin bloque de código markdown ni
 Asegúrate de que 'correct' sea simplemente un número del 0 al 3 (indicando el índice correcto). No envuelvas el resultado en bloques de código triple comilla (\`\`\`), devuelve literalmente el corchete de apertura como primer caracter.`;
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
