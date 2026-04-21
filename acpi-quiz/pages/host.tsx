@@ -534,6 +534,13 @@ export default function HostPage() {
               <div className="text-xs text-gray-500">respondieron</div>
             </div>
             <CircularTimer timeLeft={timeLeft} total={Math.round(currentQ.timeLimit * (state.timeMultiplier ?? 2))} />
+            <button onClick={() => {
+              if (confirm("¿Reiniciar partida ahora?")) hostAction("reset");
+            }} disabled={loading}
+              className="p-3 rounded-xl bg-red-900/40 border border-red-600/50 text-red-200 hover:bg-red-800/60 transition"
+              title="Reiniciar partida">
+              ♻️
+            </button>
             <button onClick={() => hostAction("reveal")} disabled={loading}
               className="py-2 px-6 rounded-xl font-bold transition-all hover:scale-105 disabled:opacity-50"
               style={{ background: "#0ea5e9" }}>
@@ -614,7 +621,13 @@ export default function HostPage() {
         )}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-3xl font-bold">{currentQ.question}</h2>
-          <div className="flex gap-3">
+            <button onClick={() => {
+              if (confirm("¿Reiniciar partida ahora?")) hostAction("reset");
+            }} disabled={loading}
+              className="p-3 rounded-xl bg-red-900/40 border border-red-600/50 text-red-200 hover:bg-red-800/60 transition"
+              title="Reiniciar partida">
+              ♻️
+            </button>
             {state.currentQuestion < state.questionOrder.length - 1 ? (
               <button onClick={() => hostAction("next_question")} disabled={loading}
                 className="py-3 px-8 rounded-xl font-bold text-xl hover:scale-105 disabled:opacity-50"
