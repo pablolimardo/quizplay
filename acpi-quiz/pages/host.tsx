@@ -621,6 +621,7 @@ export default function HostPage() {
         )}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-3xl font-bold">{currentQ.question}</h2>
+          <div className="flex items-center gap-4">
             <button onClick={() => {
               if (confirm("¿Reiniciar partida ahora?")) hostAction("reset");
             }} disabled={loading}
