@@ -31,6 +31,7 @@ export default function PlayPage() {
   const [answerResult, setAnswerResult] = useState<null | {
     correct: boolean; points: number; correctAnswer: number; explanation: string; streak: number;
   }>(null);
+  const [localScore, setLocalScore] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -188,14 +189,20 @@ export default function PlayPage() {
         body: JSON.stringify({ playerName, answerIndex: idx }),
       });
       const data = await r.json();
-      if (r.ok) setAnswerResult(data);
+      if (r.ok) {
+        setAnswerResult(data);
+        if (typeof data.totalScore === "number") {
+          setLocalScore(data.totalScore);
+        }
+      }
     } catch {
       // silent
     }
   };
 
   const avatar = AVATARS[playerName.charCodeAt(0) % 8] ?? "🎮";
-  const myScore = state?.players[playerName.toLowerCase()]?.score ?? 0;
+  const serverScore = state?.players[playerName.toLowerCase().trim()]?.score ?? 0;
+  const myScore = localScore !== null ? Math.max(localScore, serverScore) : serverScore;
 
   // ── JOIN SCREEN ──
   if (!joined) {

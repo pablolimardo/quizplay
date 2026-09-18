@@ -55,6 +55,23 @@ export async function getQuestionsFromDb(quizId: string): Promise<Question[]> {
  * Así `play` y `host` en frontend evitan tener configurados los arrays de preguntas fijos.
  */
 export async function enhanceStateWithQuestion(state: GameState): Promise<GameState & { questionData?: Question }> {
+  try {
+    const presenceMap = await redis.hgetall("acpi_quiz_presence");
+    if (presenceMap && state.players) {
+      for (const [pKey, pVal] of Object.entries(presenceMap)) {
+        if (state.players[pKey]) {
+          const parsed = typeof pVal === "string" ? JSON.parse(pVal) : pVal;
+          if (parsed && typeof parsed === "object") {
+            state.players[pKey].presence = (parsed as any).presence;
+            state.players[pKey].lastPresenceUpdate = (parsed as any).lastPresenceUpdate;
+          }
+        }
+      }
+    }
+  } catch (e) {
+    // Si falla presencia no interrumpe el estado del juego
+  }
+
   if (state.status === "question" || state.status === "answer_reveal") {
     const questions = await getQuestionsFromDb(state.selectedQuiz || "programacion");
     const qIdx = state.questionOrder[state.currentQuestion];
