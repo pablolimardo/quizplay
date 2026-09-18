@@ -10,6 +10,7 @@ import { PROG_ESTRUCTURADA_QUESTIONS } from "./prog-estructurada";
 import { PROG_3_IMPERATIVO_QUESTIONS } from "./prog-imperativo";
 import { PROG_3_IMPERATIVO_2_QUESTIONS } from "./prog-imperativo-2";
 import { POO_QUESTIONS } from "./poo";
+import { POO_2_QUESTIONS } from "./poo-2";
 
 export interface QuizDefinition {
   id: string;
@@ -82,6 +83,13 @@ export const QUIZ_LIST: QuizDefinition[] = [
     emoji: "📦",
     description: "Clases, objetos, atributos y llamadas a métodos en Python - 10 preguntas",
     questions: POO_QUESTIONS,
+  },
+  {
+    id: "poo-2",
+    name: "POO 2",
+    emoji: "📦",
+    description: "Casos prácticos de métodos, estados y acumuladores en Python - 10 preguntas",
+    questions: POO_2_QUESTIONS,
   },
 ];
 
