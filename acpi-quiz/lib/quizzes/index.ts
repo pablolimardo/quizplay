@@ -9,6 +9,7 @@ import { PROG_GENERAL_QUESTIONS } from "./prog-general";
 import { PROG_ESTRUCTURADA_QUESTIONS } from "./prog-estructurada";
 import { PROG_3_IMPERATIVO_QUESTIONS } from "./prog-imperativo";
 import { PROG_3_IMPERATIVO_2_QUESTIONS } from "./prog-imperativo-2";
+import { POO_QUESTIONS } from "./poo";
 
 export interface QuizDefinition {
   id: string;
@@ -74,6 +75,13 @@ export const QUIZ_LIST: QuizDefinition[] = [
     emoji: "🐍",
     description: "Variables, tipos, E/S, operadores y condicionales en Python (set 2) - 10 preguntas",
     questions: PROG_3_IMPERATIVO_2_QUESTIONS,
+  },
+  {
+    id: "poo",
+    name: "POO",
+    emoji: "📦",
+    description: "Clases, objetos, atributos y llamadas a métodos en Python - 10 preguntas",
+    questions: POO_QUESTIONS,
   },
 ];
 
