@@ -11,6 +11,7 @@ import { PROG_3_IMPERATIVO_QUESTIONS } from "./prog-imperativo";
 import { PROG_3_IMPERATIVO_2_QUESTIONS } from "./prog-imperativo-2";
 import { POO_QUESTIONS } from "./poo";
 import { POO_2_QUESTIONS } from "./poo-2";
+import { POO_3_QUESTIONS } from "./poo-3";
 
 export interface QuizDefinition {
   id: string;
@@ -90,6 +91,13 @@ export const QUIZ_LIST: QuizDefinition[] = [
     emoji: "📦",
     description: "Casos prácticos de métodos, estados y acumuladores en Python - 10 preguntas",
     questions: POO_2_QUESTIONS,
+  },
+  {
+    id: "poo-3",
+    name: "POO Desafío",
+    emoji: "🔥",
+    description: "Métodos internos, transferencias entre objetos, colecciones y estados complejos - 10 preguntas",
+    questions: POO_3_QUESTIONS,
   },
 ];
 
